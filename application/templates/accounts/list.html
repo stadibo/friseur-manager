@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Username</th>
+      <th>User_role</th>
+    </tr>
+    {% for account in accounts %}
+    <tr>
+      <td>{{ account.name }}</td>
+      <td>{{ account.username }}</td>
+      <td>{{ account.user_role }}</td>
+      <td>
+        <form method="POST" action="{{ url_for('accounts_change_password', account_id=account.id) }}">
+          <input type="password" name="new_password"/>
+          <input type="submit" value="Change password"/>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

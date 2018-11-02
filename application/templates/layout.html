@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>F.E.U.R.</title>
+  </head>
+
+  <body>
+
+    <ul>
+      <li><a href="{{ url_for('accounts_index') }}">List accounts</a></li>
+      <li><a href="{{ url_for('accounts_form') }}">Register</a></li>
+    </ul>
+
+    {% block body %}
+      <p>
+        Content.
+      </p>
+    {% endblock %}
+  </body>
+</html>
