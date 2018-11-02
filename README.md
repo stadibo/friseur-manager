@@ -18,4 +18,4 @@ Services are presented on a website and it is possible to make reservations from
 - work sheets for employees
 - summary for management
 
-[Live application]()
+[Live application](https://friseur-app.herokuapp.com/)
