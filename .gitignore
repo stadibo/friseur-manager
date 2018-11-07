@@ -115,3 +115,6 @@ dmypy.json
 
 # SQLite database
 friseur.db
+
+# VSCode settings
+.vscode
