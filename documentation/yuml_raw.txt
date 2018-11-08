@@ -1,0 +1,8 @@
+[User | (pk) id; date_created : datetime; date_modified : datetime; name : string; username : string; password : string; email : string; phone : string; user_role : string;],
+[Appointment | (pk) id; (fk) user_id; (fk) employee_id; date_created : datetime; date_modified : datetime; date : datetime; start : datetime; end : datetime; reservation_number : string],
+[WorkDay | (pk) id; date_created : datetime; date_modified : datetime; date : datetime;],
+[EmployeeWorkDay | (fk) work_day_id; (fk) employee_id; start : datetime; end : datetime;]
+
+[User |]2-*[Appointment |],
+[User |]1-*[EmployeeWorkDay |],
+[WorkDay |]1-*[EmployeeWorkDay |]
