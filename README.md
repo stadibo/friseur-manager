@@ -18,6 +18,9 @@ Services are presented on a website and it is possible to make reservations from
 - work sheets for employees
 - summary for management
 
+## Documentation and link to application
 [Live application](https://friseur-app.herokuapp.com/)
+
 [User stories](https://github.com/stadibo/friseurManager/blob/master/documentation/user_stories.md)
+
 [Database diagram](https://github.com/stadibo/friseurManager/blob/master/documentation/database_diagram.png)
