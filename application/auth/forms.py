@@ -21,3 +21,13 @@ class UserForm(FlaskForm):
 
     class Meta:
         csrf = False
+
+# Form for changing password
+class PasswordForm(FlaskForm):
+    old_password = PasswordField("Old password", [validators.Length(min=8)])
+    new_password = PasswordField("New password", [validators.Length(min=8)])
+    passwordConfirmation = PasswordField(
+        "Confirm new password", [validators.Length(min=8)])
+
+    class Meta:
+        csrf = False

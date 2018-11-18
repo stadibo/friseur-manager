@@ -2,7 +2,7 @@ from flask import redirect, render_template, request, url_for
 from flask_login import login_user, logout_user, login_required
 from application import app, db
 from application.auth.models import User
-from application.auth.forms import UserForm, LoginForm
+from application.auth.forms import UserForm, LoginForm, PasswordForm
 
 
 @app.route("/auth/login", methods=["GET", "POST"])
@@ -44,38 +44,55 @@ def auth_register():
     return redirect(url_for("users_index"))
 
 
-@app.route("/auth/list", methods=["GET"])
+@app.route("/auth/all", methods=["GET"])
 @login_required
 def users_index():
     return render_template("auth/list.html", users=User.query.all())
 
 
-@app.route("/auth/<user_id>/edit_user", methods=["GET", "POST"])
+@app.route("/auth/<user_id>/single", methods=["GET"])
 @login_required
-def user_edit(user_id):
+def user_single(user_id):
+    user = User.query.get(user_id)
+    return render_template("auth/single.html", user=user)
+
+
+@app.route("/auth/<user_id>/single/change_password", methods=["GET", "POST"])
+@login_required
+def user_change_password(user_id):
     user = User.query.get(user_id)
     if request.method == "GET":
-        return render_template("auth/edit_user.html", user=user)
+        form = PasswordForm()
+        return render_template("auth/edit_password.html", form=form, user_id=user_id)
 
-    rf = request.form
+    form = PasswordForm(request.form)
 
-    user.name = rf.get("name")
-    user.username = rf.get("username")
-    user.password = rf.get("password")
+    if not form.validate():
+        print("Validate error")
+        return render_template("auth/edit_password.html", form=form, user_id=user_id)
+
+    if form.new_password.data != form.passwordConfirmation.data:
+        print("password not same")
+        return render_template("auth/edit_password.html", form=form, user_id=user_id, error="confirmation does not match")
+
+    if form.old_password.data != user.password:
+        print("old password not same")
+        return render_template("auth/edit_password.html", form=form, user_id=user_id, error="old password does not match")
+
+    user.password = form.new_password.data
 
     db.session().commit()
 
     return redirect(url_for("users_index"))
 
 
-@app.route("/auth/delete/<user_id>", methods=["GET"])
+@app.route("/auth/<user_id>/single/delete", methods=["GET"])
 @login_required
 def user_delete(user_id):
     db.session().delete(User.query.get(user_id))
     db.session().commit()
 
     return redirect(url_for("users_index"))
-
 
 @app.route("/auth/logout")
 def auth_logout():

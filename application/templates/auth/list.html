@@ -7,23 +7,17 @@
   <tr>
     <th>Name</th>
     <th>Username</th>
-    <th>User_role</th>
   </tr>
   {% for user in users %}
   <tr>
     <td>{{ user.name }}</td>
     <td>{{ user.username }}</td>
-    <td>{{ user.user_role }}</td>
     <td>
-      <form method="GET" action="{{ url_for('user_edit', user_id=user.id) }}">
-        <input type="submit" value="edit" />
+      <form method="GET" action="{{ url_for('user_single', user_id=user.id) }}">
+        <input type="submit" value="view" />
       </form>
     </td>
-    <td>
-      <form method="GET" action="{{ url_for('user_delete', user_id=user.id) }}">
-        <input type="submit" value="delete" />
-      </form>
-    </td>
+    
   </tr>
   {% endfor %}
 </table>

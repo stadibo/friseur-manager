@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<table>
+  <tr>
+    <td>
+      Name
+    </td>
+    <td>
+      {{ user.name }}
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Username
+    </td>
+    <td>
+      {{ user.username }}
+    </td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td>
+      <form method="GET" action="{{ url_for('user_change_password', user_id=user.id) }}">
+        <input type="submit" value="change password" />
+      </form>
+    </td>
+    <td>
+      <form method="GET" action="{{ url_for('user_delete', user_id=user.id) }}">
+        <input type="submit" value="delete" />
+      </form>
+    </td>
+  </tr>
+</table>
+{% endblock %}
