@@ -71,7 +71,7 @@ from application.appointments import models
 # from application.appointments import views
 
 from application.work_days import models
-# from application.work_days import views
+from application.work_days import views
 
 
 # database table creation

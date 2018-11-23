@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form method="POST" action="{{ url_for('work_days_new') }}">
+  <table>
+    <tr>
+      <td>
+        {{ form.date.label }}
+      </td>
+      <td>
+        {{ form.date }}
+      </td>
+      <td>
+        <ul>
+          {% for error in form.date.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    <tr>
+      <td colspan="3">
+        <input type="submit" value="Create" />
+      </td>
+    </tr>
+  </table>
+</form>
+{% endblock %}

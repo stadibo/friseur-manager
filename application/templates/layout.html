@@ -13,15 +13,25 @@
   <p>
     Logged in as {{ current_user.name }} <a href="{{ url_for('auth_logout') }}">Logout</a>
   </p>
+
+  {% if current_user.role.name == "ADMIN" %}
   <ul>
     <li><a href="{{ url_for('users_index') }}">List accounts</a></li>
-  </ul>
-  {% else %}
+  </ul>  
+  {% endif %}
+
+  {% else  %}
   <ul>
     <li><a href="{{ url_for('auth_login') }}">Login</a></li>
     <li><a href="{{ url_for('auth_register') }}">Register</a></li>
   </ul>
   {% endif %}
+
+  
+
+  
+
+  
 
   {% block body %}
   <p>
