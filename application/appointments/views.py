@@ -30,7 +30,8 @@ def appointments_select_date(user_id):
 @app.route("/appointments/reserve/<user_id>/<work_day_id>", methods=["GET"])
 def appointments_select_time(user_id, work_day_id):
     appointments = Appointment.account_appointment_for_day(user_id, work_day_id)
-    friseur_times = list(map(lambda a: datetime.time(int(a.get("time_reserved")[0:2])), appointments))
+    print("views")
+    friseur_times = list(map(lambda a: datetime.time(int(a.time_reserved[0:2])), appointments))
     available_times = []
 
     for timeslot in range(10, 18):

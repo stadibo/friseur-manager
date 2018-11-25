@@ -27,7 +27,7 @@ class Appointment(Base):
 
     @staticmethod
     def account_appointment_for_day(user_id, work_day_id):
-        stmt = text("SELECT appointment.time_reserved, appointment.duration, appointment.customer, appointment.reservation_number, appointment.fulfilled, appointment.id "
+        stmt = text("SELECT appointment.time_reserved, appointment.duration, appointment.customer, appointment.reservation_number, appointment.fulfilled "
                     "FROM appointment "
                     "INNER JOIN account_appointment "
                     "ON account_appointment.account_id = :user "
@@ -38,7 +38,10 @@ class Appointment(Base):
 
         response = []
         for row in res:
-            response.append({"time_reserved": row[0], "duration": row[1], "customer": row[2], "reservation_number": row[3], "fulfilled": row[4], "id": row[5]})
+            print(row[0])
+            print(type(row[0]))
+            print("here")
+            response.append(Appointment(row[0], row[1], row[2], row[3], row[4]))
         
         return response
     
