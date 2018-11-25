@@ -3,7 +3,7 @@ from wtforms import IntegerField, validators
 from wtforms.fields.html5 import DateField
 
 class WorkdayForm(FlaskForm):
-  date = DateField("Date", format="%Y-%m-%d")
+  date = DateField("New work day", format="%Y-%m-%d")
 
   class Meta:
     csrf = False

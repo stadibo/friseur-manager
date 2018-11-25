@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form method="POST" action="{{ url_for('appointments_reserve_form', user_id=user_id, work_day_id=work_day_id, time=time) }}">
+  <table>
+    <tr>
+      <td>
+        {{ form.customer.label }}
+      </td>
+      <td>
+        {{ form.customer }}
+      </td>
+      <td>
+        <ul>
+          {% for error in form.customer.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <input type="submit" value="Confirm" />
+      </td>
+    </tr>
+  </table>
+</form>
+{% endblock %}

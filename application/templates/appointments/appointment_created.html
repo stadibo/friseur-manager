@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<table>
+  <tr>
+    <td>
+      Your reservation number is: 
+    </td>
+    <td>
+      {{ reservation_number }}
+    </td>
+  </tr>
+</table>
+
+<form method="GET" action="{{ url_for('appointments_index') }}">
+  <input type="submit" value="Back to front page" />
+</form>
+{% endblock %}

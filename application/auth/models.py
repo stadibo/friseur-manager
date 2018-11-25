@@ -13,6 +13,8 @@ class User(Base):
     role_id = db.Column(db.Integer, db.ForeignKey("role.id"), nullable=True)
     role = db.relationship("Role")
 
+    friseur_work_days = db.relationship("Friseur_work_day", cascade="delete", lazy=True)
+
     def __init__(self, name, username, password):
         self.name = name
         self.username = username

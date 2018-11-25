@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h3>Available friseurs</h3>
+
+<table>
+  <tr>
+    <th>Name</th>
+  </tr>
+  {% for friseur in friseurs %}
+  <tr>
+    <td>{{ friseur.name }}</td>
+    <td>
+      <form method="GET" action="{{ url_for('appointments_select_date', user_id=friseur.id) }}">
+        <input type="submit" value="choose" />
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

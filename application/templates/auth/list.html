@@ -7,11 +7,13 @@
   <tr>
     <th>Name</th>
     <th>Username</th>
+    <th>User role</th>
   </tr>
   {% for user in users %}
   <tr>
     <td>{{ user.name }}</td>
     <td>{{ user.username }}</td>
+    <td>{{ user.role.name }}</td>
     <td>
       <form method="GET" action="{{ url_for('user_single', user_id=user.id) }}">
         <input type="submit" value="view" />

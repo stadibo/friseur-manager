@@ -52,20 +52,21 @@ def auth_register():
 
 # Route to display and handle the page for an admin to create a new employee level user
 
-@app.route("/auth/new_user", methods=["GET", "POST"])
-def auth_new_employee():
+@app.route("/auth/admin/new_friseur", methods=["GET", "POST"])
+@login_required(role="ADMIN")
+def auth_new_friseur():
     if request.method == "GET":
-        return render_template("auth/new_user.html", form=UserForm())
+        return render_template("auth/new_friseur.html", form=UserForm())
 
     form = UserForm(request.form)
 
     if not form.validate():
         print("Validate error")
-        return render_template("auth/new_user.html", form=form)
+        return render_template("auth/new_friseur.html", form=form)
 
     if form.password.data != form.passwordConfirmation.data:
         print("password not same")
-        return render_template("auth/new_user.html", form=form)
+        return render_template("auth/new_friseur.html", form=form)
 
     user = User(form.name.data, form.username.data, form.password.data)
     user.role = Role.query.get(2)
@@ -79,15 +80,15 @@ def auth_new_employee():
 
 # Route to display the page for listing all existing users
 
-@app.route("/auth/all", methods=["GET"])
+@app.route("/auth/admin/all", methods=["GET"])
 @login_required(role="ADMIN")
 def users_index():
-    return render_template("auth/list.html", users=User.query.all())
+    return render_template("auth/list.html", users=User.query.order_by("role_id").all())
 
 
 # Route to display the page for showing information about a single user
 
-@app.route("/auth/<user_id>/single", methods=["GET"])
+@app.route("/auth/admin/<user_id>/single", methods=["GET"])
 @login_required(role="ADMIN")
 def user_single(user_id):
     user = User.query.get(user_id)
@@ -96,7 +97,7 @@ def user_single(user_id):
 
 # Route to display and handle the page for an admin to change the password of a user
 
-@app.route("/auth/<user_id>/single/change_password", methods=["GET", "POST"])
+@app.route("/auth/admin/<user_id>/single/change_password", methods=["GET", "POST"])
 @login_required(role="ADMIN")
 def user_change_password(user_id):
     user = User.query.get(user_id)
@@ -127,7 +128,7 @@ def user_change_password(user_id):
 
 # Route for an admin to delete a user other than the admin themselves
 
-@app.route("/auth/<user_id>/single/delete", methods=["GET"])
+@app.route("/auth/admin/<user_id>/single/delete", methods=["GET"])
 @login_required(role="ADMIN")
 def user_delete(user_id):
     user = User.query.get(user_id)

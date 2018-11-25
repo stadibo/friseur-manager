@@ -1,8 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h2>New work day</h2>
-
+<h3>Work days</h3>
 <form method="POST" action="{{ url_for('work_days_index') }}">
   <table>
     <tr>
@@ -21,13 +20,11 @@
       </td>
     <tr>
       <td colspan="3">
-        <input type="submit" value="Create" />
+        <input type="submit" value="Create new" />
       </td>
     </tr>
   </table>
 </form>
-
-<h2>Work days</h2>
 
 <table>
   <tr>
@@ -35,10 +32,15 @@
   </tr>
   {% for work_day in work_days %}
   <tr>
-    <td>{{ work_day.date }}</td>
+    <td>{{ work_day }}</td>
     <td>
       <form method="GET" action="{{ url_for('work_days_info', work_day_id=work_day.id) }}">
         <input type="submit" value="details" />
+      </form>
+    </td>
+    <td>
+      <form method="POST" action="{{ url_for('work_days_delete', work_day_id=work_day.id) }}">
+        <input type="submit" value="delete" />
       </form>
     </td>
   </tr>

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h3>Appointments</h3>
+
+<table>
+  <tr>
+    <th>Time reserved</th>
+    <th>Duration</th>
+    <th>Customer</th>
+    <th>Reservation number</th>
+    <th>Fulfilled</th>
+  </tr>
+  {% for appointment in appointments %}
+  <tr>
+    <td>{{ appointment.time_reserved }}</td>
+    <td>{{ appointment.duration }}</td>
+    <td>{{ appointment.customer }}</td>
+    <td>{{ appointment.reservation_number }}</td>
+    <td>{{ appointment.fulfilled }}</td>
+    <td>
+      <form method="POST" action="{{ url_for('appointments_delete', appointment_id=appointment.id) }}">
+        <input type="submit" value="delete" />
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
