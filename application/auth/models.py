@@ -36,7 +36,7 @@ class User(Base):
 class Role(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(5), nullable=False)
+    name = db.Column(db.String(8), nullable=False)
 
     def __init__(self, name):
         self.name = name

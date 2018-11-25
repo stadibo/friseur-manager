@@ -42,7 +42,6 @@ def auth_register():
 
     user = User(form.name.data, form.username.data, form.password.data)
     user.role = Role.query.get(1)
-    print(user.role)
 
     db.session().add(user)
     db.session().commit()
