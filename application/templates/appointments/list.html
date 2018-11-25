@@ -3,15 +3,19 @@
 {% block body %}
 <h3>Appointments</h3>
 
-<table>
+<table class="table table-sm table-hover" style="width: 100%">
   <tr>
-    <th>Date</th>
-    <th>Time reserved</th>
-    <th>Duration</th>
-    <th>Customer</th>
-    <th>Reservation number</th>
-    <th>Friseur</th>
-    <th>Fulfilled</th>
+    <thead>
+      <th>Date</th>
+      <th>Time reserved</th>
+      <th>Duration</th>
+      <th>Customer</th>
+      <th>Reservation number</th>
+      <th>Friseur</th>
+      <th>Fulfilled</th>
+      <th></th>
+      <th></th>
+    </thead>
   </tr>
   {% for appointment in appointments %}
   <tr>

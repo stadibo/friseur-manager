@@ -7,7 +7,7 @@ class Work_day(Base):
     date = db.Column(db.DateTime, nullable=False, unique=True)
     
     friseur_work_days = db.relationship("Friseur_work_day", cascade="delete", lazy=True)
-    appointments = db.relationship("Appointment", backref="work_day", lazy=True)
+    appointments = db.relationship("Appointment", cascade="delete", backref="work_day", lazy=True)
 
     def __init__(self, date):
         self.date = date

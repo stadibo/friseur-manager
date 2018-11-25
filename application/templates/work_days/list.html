@@ -3,7 +3,7 @@
 {% block body %}
 <h3>Work days</h3>
 <form method="POST" action="{{ url_for('work_days_index') }}">
-  <table>
+  <table class="table table-sm" style="width: 50%">
     <tr>
       <td>
         {{ form.date.label }}
@@ -26,9 +26,13 @@
   </table>
 </form>
 
-<table>
+<table class="table table-sm table-hover" style="width: 50%">
   <tr>
-    <th>Date</th>
+    <thead>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+    </thead>
   </tr>
   {% for work_day in work_days %}
   <tr>

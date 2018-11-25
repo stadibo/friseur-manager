@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <a class="nav-link" href="{{ url_for('appointments_select_friseur') }}">
-    Reserve an appointment
-  </a>
+  <h3>Is your hair throwing errors?</h3>
+  <form method="GET" action="{{ url_for('appointments_select_friseur') }}"> 
+    <input type="submit" value="Reserve an appointment"/>
+  </form>
 {% endblock %}

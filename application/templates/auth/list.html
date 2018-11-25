@@ -1,13 +1,16 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h2>Users</h2>
+<h3>Users</h3>
 
-<table>
+<table class="table table-sm table-hover">
   <tr>
-    <th>Name</th>
-    <th>Username</th>
-    <th>User role</th>
+    <thead>
+      <th>Name</th>
+      <th>Username</th>
+      <th>User role</th>
+      <th></th>
+    </thead>
   </tr>
   {% for user in users %}
   <tr>

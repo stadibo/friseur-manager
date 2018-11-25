@@ -31,9 +31,12 @@ def appointments_select_date(user_id):
 def appointments_select_time(user_id, work_day_id):
     appointments = Appointment.account_appointment_for_day(user_id, work_day_id)
     print("views")
+
+    # Filter timeslots so that only non occupied appointment time possibilities are shown
     friseur_times = list(map(lambda a: datetime.time(int(a.get("time_reserved")[0:2])), appointments))
     available_times = []
 
+    # Display only open timeslots
     for timeslot in range(10, 18):
         if datetime.time(timeslot, 0) not in friseur_times:
             available_times.append(datetime.time(timeslot, 0))
