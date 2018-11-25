@@ -5,6 +5,7 @@
 
 <table>
   <tr>
+    <th>Date</th>
     <th>Time reserved</th>
     <th>Duration</th>
     <th>Customer</th>
@@ -14,6 +15,7 @@
   </tr>
   {% for appointment in appointments %}
   <tr>
+    <td>{{ appointment.date }}</td>
     <td>{{ appointment.time_reserved }}</td>
     <td>{{ appointment.duration }}</td>
     <td>{{ appointment.customer }}</td>
