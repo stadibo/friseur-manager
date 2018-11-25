@@ -1,6 +1,7 @@
 from application import db
 from application.models import Base
 from sqlalchemy.sql import text
+import datetime
 
 users = db.Table("account_appointment",
     db.Column("account_id", db.Integer, db.ForeignKey("account.id"), primary_key=True),
@@ -41,7 +42,11 @@ class Appointment(Base):
             print(row[0])
             print(type(row[0]))
             print("here")
-            response.append(Appointment(row[0], row[1], row[2], row[3], row[4]))
+            if isinstance(row[0], datetime.time):
+                time = row[0].strftime("%H:%M:%S")
+            else:
+                time = row[0][0:8]
+            response.append({"time_reserved": time, "duration": row[1], "customer": row[2], "reservation_number": row[3], "fulfilled": row[4]})
         
         return response
     
@@ -61,6 +66,18 @@ class Appointment(Base):
 
         response = []
         for row in res:
-            response.append({"time_reserved": row[0][0:8], "duration": row[1], "customer": row[2], "reservation_number": row[3], "friseur": row[4], "fulfilled": row[5], "id": row[6], "date": row[7][0:10]})
+            print(row[0])
+            print(type(row[0]))
+            print("here")
+            if isinstance(row[0], datetime.time):
+                time = row[0].strftime("%H:%M:%S")
+            else:
+                time = row[0][0:8]
+            if isinstance(row[0], datetime.datetime):
+                date = row[7].strftime("%Y-%m-%d")
+            else:
+                date = row[7][0:10]
+            
+            response.append({"time_reserved": time, "duration": row[1], "customer": row[2], "reservation_number": row[3], "friseur": row[4], "fulfilled": row[5], "id": row[6], "date": date})
         
         return response
