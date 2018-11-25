@@ -73,7 +73,7 @@ class Appointment(Base):
                 time = row[0].strftime("%H:%M:%S")
             else:
                 time = row[0][0:8]
-            if isinstance(row[0], datetime.datetime):
+            if isinstance(row[7], datetime.datetime):
                 date = row[7].strftime("%Y-%m-%d")
             else:
                 date = row[7][0:10]
