@@ -85,20 +85,20 @@ try:
     if not role:
         role = Role("USER")
         db.session().add(role)
-        db.session.commit()
+        db.session().commit()
 
     role = Role.query.filter_by(name="FRISEUR").first()
 
     if not role:
         role = Role("FRISEUR")
         db.session().add(role)
-        db.session.commit()
+        db.session().commit()
 
     role = Role.query.filter_by(name="ADMIN").first()
 
     if not role:
         role = Role("ADMIN")
         db.session().add(role)
-        db.session.commit()
+        db.session().commit()
 except:
     pass
