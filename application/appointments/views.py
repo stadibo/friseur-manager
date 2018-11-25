@@ -12,7 +12,7 @@ import random
 @app.route("/appointments/admin/all", methods=["GET"])
 @login_required(role="ADMIN")
 def appointments_index():
-    return render_template("appointments/list.html", appointments=Appointment.query.all())
+    return render_template("appointments/list.html", appointments=Appointment.full_appointment_data())
 
 
 @app.route("/appointments/reserve/select_friseur", methods=["GET"])
@@ -29,9 +29,8 @@ def appointments_select_date(user_id):
 
 @app.route("/appointments/reserve/<user_id>/<work_day_id>", methods=["GET"])
 def appointments_select_time(user_id, work_day_id):
-    appointments = Appointment.account_appointment_for_day(
-        user_id, work_day_id)
-    friseur_times = list(map(lambda a: datetime.time(int(a.time_reserved[0:2])), appointments))
+    appointments = Appointment.account_appointment_for_day(user_id, work_day_id)
+    friseur_times = list(map(lambda a: datetime.time(int(a.get("time_reserved")[0:2])), appointments))
     available_times = []
 
     for timeslot in range(10, 18):
@@ -89,7 +88,20 @@ def appointments_reserve_form(user_id, work_day_id, time):
     db.session().commit()
     return render_template("appointments/appointment_created.html", reservation_number=res_nr)
 
+
+@app.route("/appointments/admin/<appointment_id>/complete", methods=["POST"])
+@login_required(role="ADMIN")
+def appointments_single_complete(appointment_id):
+    appointment = Appointment.query.get(appointment_id)
+    appointment.fulfilled = True
+    db.session().commit()
+
+    return redirect(url_for("appointments_index"))
+
+
 @app.route("/appointments/admin/<appointment_id>/delete", methods=["POST"])
 @login_required(role="ADMIN")
-def appointments_delete(appointment_id):
+def appointments_single_delete(appointment_id):
+    db.session().delete(Appointment.query.get(appointment_id))
+    db.session().commit()
     return redirect(url_for("appointments_index"))
