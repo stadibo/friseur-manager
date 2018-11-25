@@ -30,7 +30,7 @@ class Appointment(Base):
         stmt = text("SELECT appointment.time_reserved, appointment.duration, appointment.customer, appointment.reservation_number, appointment.fulfilled "
                     "FROM appointment "
                     "INNER JOIN account_appointment "
-                    "WHERE account_appointment.account_id = :user "
+                    "ON account_appointment.account_id = :user "
                     "AND account_appointment.appointment_id = appointment.id "
                     "AND appointment.work_day_id = :work_day "
                     "ORDER BY appointment.time_reserved ASC ;").params(user=user_id, work_day=work_day_id)
