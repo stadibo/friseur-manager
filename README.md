@@ -18,6 +18,12 @@ Services are presented on a website and it is possible to make reservations from
 - work sheets for employees
 - summary for management
 
+## Test user credentials 
+
+|	__USERNAME__ | __PASSWORD__  |   __ROLE__    | 
+|--------------|---------------|---------------|
+| admin        |   password    |    ADMIN      |
+
 ## Documentation and link to application
 [Live application](https://friseur-app.herokuapp.com/)
 
