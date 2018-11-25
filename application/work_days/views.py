@@ -12,7 +12,7 @@ from datetime import datetime, date
 @login_required(role="ADMIN")
 def work_days_index():
     if request.method == "GET":
-        return render_template("work_days/list.html", form=WorkdayForm(),  work_days=Work_day.query.all())
+        return render_template("work_days/list.html", form=WorkdayForm(),  work_days=Work_day.query.order_by(Work_day.date.asc()).all())
 
     form = WorkdayForm(request.form)
 

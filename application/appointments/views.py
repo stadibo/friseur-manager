@@ -12,7 +12,10 @@ import random
 @app.route("/appointments/admin/all", methods=["GET"])
 @login_required(role="ADMIN")
 def appointments_index():
-    return render_template("appointments/list.html", appointments=Appointment.full_appointment_data())
+    appointments = Appointment.full_appointment_data()
+    upcoming = Appointment.how_many_upcoming_appointments()[0].get("upcoming")
+    fulfilled = Appointment.how_many_appointments_fulfilled()[0].get("fulfilled")
+    return render_template("appointments/list.html", appointments=appointments, upcoming=upcoming, fulfilled=fulfilled)
 
 
 @app.route("/appointments/reserve/select_friseur", methods=["GET"])

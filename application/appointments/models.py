@@ -39,9 +39,7 @@ class Appointment(Base):
 
         response = []
         for row in res:
-            print(row[0])
-            print(type(row[0]))
-            print("here")
+            # Cheack type of object because of difference in returned object between development db and production db
             if isinstance(row[0], datetime.time):
                 time = row[0].strftime("%H:%M:%S")
             else:
@@ -66,9 +64,7 @@ class Appointment(Base):
 
         response = []
         for row in res:
-            print(row[0])
-            print(type(row[0]))
-            print("here")
+            # Cheack type of object because of difference in returned object between development db and production db
             if isinstance(row[0], datetime.time):
                 time = row[0].strftime("%H:%M:%S")
             else:
@@ -79,5 +75,52 @@ class Appointment(Base):
                 date = row[7][0:10]
             
             response.append({"time_reserved": time, "duration": row[1], "customer": row[2], "reservation_number": row[3], "friseur": row[4], "fulfilled": row[5], "id": row[6], "date": date})
+        
+        return response
+
+    @staticmethod
+    def how_many_upcoming_appointments():
+        stmt = text("SELECT COUNT(DISTINCT appointment.id) "
+                    "FROM appointment "
+                    "INNER JOIN work_day "
+                    "ON appointment.work_day_id = work_day.id "
+                    "WHERE CURRENT_TIMESTAMP < work_day.date OR CURRENT_TIME < appointment.time_reserved;")
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"upcoming": row[0]})
+        
+        return response
+
+    @staticmethod
+    def how_many_upcoming_appointments_for_friseur(user_id):
+        stmt = text("SELECT COUNT(DISTINCT appointment.id) "
+                    "FROM appointment "
+                    "INNER JOIN account_appointment "
+                    "ON appointment.id = account_appointment.appointment_id "
+                    "INNER JOIN account "
+                    "ON account_appointment.account_id = :user "
+                    "INNER JOIN work_day "
+                    "ON appointment.work_day_id = work_day.id "
+                    "WHERE CURRENT_TIMESTAMP < work_day.date OR CURRENT_TIME < appointment.time_reserved;").params(user=user_id)
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"upcoming": row[0]})
+        
+        return response
+    
+    @staticmethod
+    def how_many_appointments_fulfilled():
+        stmt = text("SELECT COUNT(DISTINCT appointment.id) "
+                    "FROM appointment "
+                    "WHERE appointment.fulfilled IS true;")
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"fulfilled": row[0]})
         
         return response
