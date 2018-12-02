@@ -27,7 +27,11 @@ class Work_day(Base):
 
         response = []
         for row in res:
-            response.append({"id": row[0], "date": row[1]})
+            if isinstance(row[1], datetime.datetime):
+                date = row[1].strftime("%Y-%m-%d")
+            else:
+                date = row[1][0:10]
+            response.append({"id": row[0], "date": date})
         
         return response
 
