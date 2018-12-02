@@ -1,32 +1,28 @@
-from flask import Flask
-app = Flask(__name__)
-
-from flask_sqlalchemy import SQLAlchemy
 import os
+from flask import Flask
+from flask_bcrypt import Bcrypt
+from flask_wtf.csrf import CSRFProtect
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, current_user
+from functools import wraps
 
-# database
+from config import Config
 
-if os.environ.get("HEROKU"):
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
-else:
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///friseur.db"
-    app.config["SQLALCHEMY_ECHO"] = True
+app = Flask(__name__)
+app.config.from_object(Config)
 
+bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 
-# login authorization
-
-from os import urandom
-app.config["SECRET_KEY"] = urandom(32)
-
-from flask_login import LoginManager, current_user
+# Login functionality
 login_manager = LoginManager()
 login_manager.init_app(app)
-
 login_manager.login_view = "auth_login"
 login_manager.login_message = "Please log in to use this functionality."
 
-from functools import wraps
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 
 def login_required(role="ANY"):
     def wrapper(fn):
@@ -52,15 +48,6 @@ def login_required(role="ANY"):
         return decorated_view
     return wrapper
 
-# login functionality
-
-from application.auth.models import User, Role
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
-
-
 # application
 from application import views
 
@@ -72,6 +59,8 @@ from application.appointments import views
 
 from application.work_days import models
 from application.work_days import views
+
+from application.auth.models import User, Role
 
 
 # database table creation

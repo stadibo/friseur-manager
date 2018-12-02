@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, validators
+from wtforms import StringField, PasswordField, SubmitField, validators
 
 
 # Form for logging in
 class LoginForm(FlaskForm):
-    username = StringField("Username")
-    password = PasswordField("Password")
+    username = StringField("Username", [validators.DataRequired(), validators.Length(min=3, max=100)])
+    password = PasswordField("Password", [validators.DataRequired(), validators.Length(min=8, max=100)])
 
     class Meta:
         csrf = False
@@ -13,12 +13,12 @@ class LoginForm(FlaskForm):
 
 # Form for user creation
 class UserForm(FlaskForm):
-    name = StringField("Name", [validators.Length(min=2)])
-    username = StringField("Username", [validators.Length(min=3)])
-    password = PasswordField("Password", [validators.Length(min=8)])
+    name = StringField("Name", [validators.DataRequired(), validators.Length(min=2, max=200)])
+    username = StringField("Username", [validators.DataRequired(), validators.Length(min=3, max=200)])
+    password = PasswordField("Password", [validators.DataRequired(), validators.Length(min=8, max=200)])
     passwordConfirmation = PasswordField(
-        "Confirm password", [validators.Length(min=8)])
-
+        "Confirm password", [validators.DataRequired(), validators.Length(min=8, max=100), validators.EqualTo("password", message="Passwords do not match")])
+        
     class Meta:
         csrf = False
 

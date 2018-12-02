@@ -15,10 +15,11 @@ def auth_login():
 
     form = LoginForm(request.form)
 
-    user = User.query.filter_by(
-        username=form.username.data).first()
+    user = User.query.filter_by(username=form.username.data).first()
+
     if not user:
         return render_template("auth/loginform.html", form=form, error="No such username or password")
+    
     if form.password.data != user.password:
         return render_template("auth/loginform.html", form=form, error="No such username or password")
 
@@ -36,11 +37,13 @@ def auth_register():
     form = UserForm(request.form)
 
     if not form.validate():
-        print("Validate error")
         return render_template("auth/new_user.html", form=form)
 
     if form.password.data != form.passwordConfirmation.data:
-        print("password not same")
+        return render_template("auth/new_user.html", form=form)
+
+    user = User.query.filter_by(username=form.username.data).first()
+    if user:
         return render_template("auth/new_user.html", form=form)
 
     user = User(form.name.data, form.username.data, form.password.data)
