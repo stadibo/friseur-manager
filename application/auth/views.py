@@ -2,6 +2,7 @@ from flask import redirect, render_template, request, url_for
 from flask_login import login_user, logout_user, current_user
 from application import app, db, login_required, login_manager
 from application.auth.models import User, Role
+from application.work_days.models import Work_day, Friseur_work_day
 from application.auth.forms import UserForm, LoginForm, PasswordForm
 
 
@@ -17,6 +18,8 @@ def auth_login():
     user = User.query.filter_by(
         username=form.username.data).first()
     if not user:
+        return render_template("auth/loginform.html", form=form, error="No such username or password")
+    if form.password.data != user.password:
         return render_template("auth/loginform.html", form=form, error="No such username or password")
 
     login_user(user)
@@ -69,11 +72,18 @@ def auth_new_friseur():
 
     user = User(form.name.data, form.username.data, form.password.data)
     user.role = Role.query.get(2)
-    print(user.role)
 
     db.session().add(user)
-    db.session().commit()
+    db.session().flush()
 
+    # Add all upcoming work days to friseur
+    upcoming_work_days = Work_day.upcoming_work_days()
+    for day in upcoming_work_days:
+        friseur_work_day = Friseur_work_day(user.id, day.get("id"), 10, 17)
+        db.session().add(friseur_work_day)
+        db.session().flush()
+
+    db.session().commit()
     return redirect(url_for("users_index"))
 
 

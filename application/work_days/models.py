@@ -1,5 +1,6 @@
 from application import db
 from application.models import Base
+from sqlalchemy.sql import text
 
 
 class Work_day(Base):
@@ -14,6 +15,20 @@ class Work_day(Base):
 
     def __repr__(self):
         return self.date.strftime("%Y-%m-%d")
+    
+    @staticmethod
+    def upcoming_work_days():
+        stmt = text("SELECT work_day.id, work_day.date "
+                    "FROM work_day "
+                    "WHERE CURRENT_TIMESTAMP < work_day.date "
+                    "ORDER BY work_day.date ASC;")
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"id": row[0], "date": row[1]})
+        
+        return response
 
 class Friseur_work_day(db.Model):
     user_id = db.Column("account_id", db.Integer, db.ForeignKey("account.id"), primary_key=True)
@@ -24,11 +39,11 @@ class Friseur_work_day(db.Model):
     user = db.relationship("User")
     work_day = db.relationship("Work_day")
 
-    def __init__(self, user, work_day, start, end):
-        self.user_id = user.id
-        self.work_day_id = work_day.id
+    def __init__(self, user_id, work_day_id, start, finish):
+        self.user_id = user_id
+        self.work_day_id = work_day_id
         self.start = start
-        self.end = end
+        self.finish = finish
 
     def __repr__(self):
         return "{} -> {}".format(self.start, self.finish)

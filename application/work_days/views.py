@@ -33,7 +33,7 @@ def work_days_index():
     friseurs = User.query.filter_by(role_id=2)
     added_work_day = Work_day.query.filter_by(date=work_day.date).first()
     for friseur in friseurs:
-        db.session().add(Friseur_work_day(friseur, added_work_day, 10, 17))
+        db.session().add(Friseur_work_day(friseur.id, added_work_day.id, 10, 17))
         db.session().commit()
 
     return redirect(url_for("work_days_index"))
