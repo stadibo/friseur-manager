@@ -5,8 +5,8 @@ from wtforms.fields.html5 import DateField
 class WorkdayForm(FlaskForm):
   date = DateField("New work day", format="%Y-%m-%d")
 
-  class Meta:
-    csrf = False
+  # class Meta:
+  #   csrf = False
 
 class MultipleWorkdayForm(FlaskForm):
   date = DateField("Start from date")

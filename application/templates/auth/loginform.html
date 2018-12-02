@@ -3,6 +3,7 @@
 {% block body %}
 {{ error }}
 <form method="POST" action="{{ url_for('auth_login') }}">
+  {{ form.hidden_tag() }}
   <table>
     <tr>
       <td>

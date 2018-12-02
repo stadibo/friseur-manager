@@ -3,6 +3,7 @@
 {% block body %}
 <h3>New user</h3>
 <form method="POST" action="{{ url_for('auth_register') }}">
+  {{ form.hidden_tag() }}
   <table>
     <tr>
       <td>

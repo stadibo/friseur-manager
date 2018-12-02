@@ -5,5 +5,5 @@ from wtforms import StringField, validators
 class AppointmentForm(FlaskForm):
     customer = StringField("Name", [validators.Length(min=2, max=100)])
 
-    class Meta:
-        csrf = False
+    # class Meta:
+    #     csrf = False

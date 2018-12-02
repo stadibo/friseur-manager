@@ -2,6 +2,7 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('work_days_new') }}">
+  {{ form.hidden_tag() }}
   <table>
     <tr>
       <td>

@@ -2,6 +2,7 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('appointments_reserve_form', user_id=user_id, work_day_id=work_day_id, time=time) }}">
+  {{ form.hidden_tag() }}
   <table>
     <tr>
       <td>
