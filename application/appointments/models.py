@@ -88,7 +88,7 @@ class Appointment(Base):
                     "ON account_appointment.appointment_id = appointment.id "
                     "LEFT JOIN account "
                     "ON account_appointment.account_id = account.id "
-                    "AND account.role_id = 2 "
+                    "WHERE account.role_id = 2 "
                     "ORDER BY work_day.date ASC ;")
         res = db.engine.execute(stmt)
 

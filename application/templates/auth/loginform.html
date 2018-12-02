@@ -1,13 +1,14 @@
 {% extends "layout.html" %}
 
 {% block body %}
+{{ error }}
 <h3 class="display-5">Login</h3>
 <form method="POST" action="{{ url_for('auth_login') }}">
   <dl>
     {{ form.hidden_tag() }}
     {{ wtf.form_field(form.username) }}
     {{ wtf.form_field(form.password) }}
-    {{ error }}
+    
     {{ wtf.form_field(form.login, class="btn btn-primary btn-md") }}
   </dl>
 </form>

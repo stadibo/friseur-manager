@@ -26,4 +26,39 @@
     <a href="{{ url_for('user_delete', user_id=user.id) }}" class="btn btn-danger btn-md" role="button">Delete</a>
   </div>
 </div>
+{% if user.role.name == "FRISEUR" %}
+<div class="container">
+  <h3 class="display-5">Appointments</h3>
+  <table class="table table-sm table-hover">
+    <tr>
+      <td>
+        Amount of upcoming appointments for user:
+      </td>
+      <td>
+        <strong>{{ upcoming }}</strong>
+      </td>
+    </tr>
+  </table>
+  <table class="table table-sm table-hover" style="width: 100%">
+    <tr>
+      <thead>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Customer</th>
+        <th>Res.No.</th>
+        <th>Fulfilled</th>
+      </thead>
+    </tr>
+    {% for appointment in appointments %}
+    <tr>
+      <td>{{ appointment.work_day.date }}</td>
+      <td>{{ appointment.time_reserved }}</td>
+      <td>{{ appointment.customer }}</td>
+      <td>{{ appointment.reservation_number }}</td>
+      <td>{{ appointment.fulfilled }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
 {% endblock %}

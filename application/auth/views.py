@@ -117,7 +117,7 @@ def users_index():
 @login_required(role="ADMIN")
 def user_single(user_id):
     user = User.query.get(user_id)
-    return render_template("auth/single.html", user=user)
+    return render_template("auth/single.html", user=user, appointments=user.appointments, upcoming=len(user.appointments))
 
 
 # Route to display and handle the page for an admin to change the password of a user
