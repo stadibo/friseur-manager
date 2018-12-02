@@ -1,6 +1,7 @@
 from flask import redirect, render_template, request, url_for
 from flask_login import login_user, logout_user, current_user
-from application import app, db, login_required, login_manager
+
+from application import app, db, login_required, login_manager, bcrypt
 from application.auth.models import User, Role
 from application.work_days.models import Work_day, Friseur_work_day
 from application.auth.forms import UserForm, LoginForm, PasswordForm
@@ -17,13 +18,11 @@ def auth_login():
 
     user = User.query.filter_by(username=form.username.data).first()
 
-    if not user:
-        return render_template("auth/loginform.html", form=form, error="No such username or password")
-    
-    if form.password.data != user.password:
+    if user is None or not bcrypt.check_password_hash(user.password, form.password.data):
         return render_template("auth/loginform.html", form=form, error="No such username or password")
 
     login_user(user)
+
     return redirect(url_for("index"))
 
 
@@ -39,15 +38,18 @@ def auth_register():
     if not form.validate():
         return render_template("auth/new_user.html", form=form)
 
-    if form.password.data != form.passwordConfirmation.data:
-        return render_template("auth/new_user.html", form=form)
-
     user = User.query.filter_by(username=form.username.data).first()
     if user:
         return render_template("auth/new_user.html", form=form)
 
-    user = User(form.name.data, form.username.data, form.password.data)
-    user.role = Role.query.get(1)
+    password_hash = bcrypt.generate_password_hash(form.password.data)
+    user = User(form.name.data, form.username.data, password_hash)
+
+    # if this is first user make them an admin
+    if User.query.count() == 0:
+        user.role = Role.query.get(3) # admin
+    else:
+        user.role = Role.query.get(1) # user
 
     db.session().add(user)
     db.session().commit()
