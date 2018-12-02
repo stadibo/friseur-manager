@@ -9,9 +9,9 @@
   </tr>
   {% for work_day in work_days %}
   <tr>
-    <td>{{ work_day.work_day }}</td>
+    <td>{{ work_day.date }}</td>
     <td>
-      <form method="GET" action="{{ url_for('appointments_select_time', user_id=user_id, work_day_id=work_day.work_day.id) }}">
+      <form method="GET" action="{{ url_for('appointments_select_time', user_id=user_id, work_day_id=work_day.id) }}">
         <input type="submit" value="choose" />
       </form>
     </td>

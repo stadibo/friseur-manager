@@ -25,15 +25,13 @@ def appointments_select_friseur():
 
 @app.route("/appointments/reserve/<user_id>/select_date", methods=["GET"])
 def appointments_select_date(user_id):
-    friseur = User.query.get(user_id)
-    friseur_work_days = friseur.friseur_work_days
+    friseur_work_days = Friseur_work_day.upcoming_friseur_work_days(user_id)
     return render_template("appointments/select_date.html", work_days=friseur_work_days, user_id=user_id)
 
 
 @app.route("/appointments/reserve/<user_id>/<work_day_id>", methods=["GET"])
 def appointments_select_time(user_id, work_day_id):
     appointments = Appointment.account_appointment_for_day(user_id, work_day_id)
-    print("views")
 
     # Filter timeslots so that only non occupied appointment time possibilities are shown
     friseur_times = list(map(lambda a: datetime.time(int(a.get("time_reserved")[0:2])), appointments))

@@ -1,6 +1,7 @@
 from application import db
 from application.models import Base
 from sqlalchemy.sql import text
+import datetime
 
 
 class Work_day(Base):
@@ -46,4 +47,26 @@ class Friseur_work_day(db.Model):
         self.finish = finish
 
     def __repr__(self):
-        return "{} -> {}".format(self.start, self.finish)
+        return "{}, from {} to {}".format(self.work_day.date, self.start, self.finish)
+
+    @staticmethod
+    def upcoming_friseur_work_days(user_id):
+        stmt = text("SELECT work_day.id, work_day.date "
+                    "FROM friseur_work_day "
+                    "INNER JOIN work_day "
+                    "ON friseur_work_day.work_day_id = work_day.id "
+                    "WHERE friseur_work_day.account_id = :user "
+                    "AND CURRENT_TIMESTAMP < work_day.date "
+                    "ORDER BY work_day.date ASC;").params(user=user_id)
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            # Cheack type of object because of difference in returned object between development db and production db
+            if isinstance(row[0], datetime.time):
+                date = row[1].strftime("%H:%M:%S")
+            else:
+                date = row[1][0:10]
+            response.append({"id": row[0], "date": date})
+        
+        return response
