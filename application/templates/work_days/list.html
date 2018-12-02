@@ -28,7 +28,7 @@
         </form>
       </div>
       <div class="col">
-        <form method="POST" action="{{ url_for('work_days_delete', work_day_id=work_day.id) }}">
+        <form method="GET" action="{{ url_for('work_days_delete', work_day_id=work_day.id) }}">
           <input type="submit" class="btn btn-danger btn-md" value="Delete" />
         </form>
       </div>

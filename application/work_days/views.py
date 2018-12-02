@@ -49,7 +49,7 @@ def work_days_info(work_day_id):
 
 # Route for deleting work days
 
-@app.route("/workdays/admin/<work_day_id>/delete", methods=["POST"])
+@app.route("/workdays/admin/<work_day_id>/delete", methods=["GET"])
 @login_required(role="ADMIN")
 def work_days_delete(work_day_id):
     work_day = Work_day.query.get(work_day_id)
