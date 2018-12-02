@@ -63,7 +63,7 @@ class Friseur_work_day(db.Model):
         response = []
         for row in res:
             # Cheack type of object because of difference in returned object between development db and production db
-            if isinstance(row[0], datetime.datetime):
+            if isinstance(row[1], datetime.datetime):
                 date = row[1].strftime("%Y-%m-%d")
             else:
                 date = row[1][0:10]
