@@ -7,6 +7,7 @@ class LoginForm(FlaskForm):
     username = StringField("Username", [validators.DataRequired(), validators.Length(min=3, max=100)])
     password = PasswordField("Password", [validators.DataRequired(), validators.Length(min=8, max=50)])
 
+    login = SubmitField("Let me in")
     # class Meta:
     #     csrf = False
 
@@ -18,7 +19,8 @@ class UserForm(FlaskForm):
     password = PasswordField("Password", [validators.DataRequired(), validators.Length(min=8, max=50)])
     passwordConfirmation = PasswordField(
         "Confirm password", [validators.DataRequired(), validators.Length(min=8, max=50), validators.EqualTo("password", message="Passwords do not match")])
-        
+    
+    create = SubmitField("Create")
     # class Meta:
     #     csrf = False
 
@@ -27,7 +29,8 @@ class PasswordForm(FlaskForm):
     old_password = PasswordField("Old password", [validators.DataRequired(), validators.Length(min=8, max=50)])
     new_password = PasswordField("New password", [validators.DataRequired(), validators.Length(min=8, max=50)])
     passwordConfirmation = PasswordField(
-        "Confirm new password", [validators.DataRequired(), validators.Length(min=8, max=50), validators.EqualTo("password", message="Passwords do not match")])
+        "Confirm new password", [validators.DataRequired(), validators.Length(min=8, max=50), validators.EqualTo("new_password", message="Passwords do not match")])
 
+    confirm = SubmitField("Confirm")
     # class Meta:
     #     csrf = False

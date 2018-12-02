@@ -94,7 +94,7 @@ def appointments_reserve_form(user_id, work_day_id, time):
     return render_template("appointments/appointment_created.html", reservation_number=res_nr)
 
 
-@app.route("/appointments/admin/<appointment_id>/complete", methods=["POST"])
+@app.route("/appointments/admin/<appointment_id>/complete", methods=["GET"])
 @login_required(role="ADMIN")
 def appointments_single_complete(appointment_id):
     appointment = Appointment.query.get(appointment_id)
@@ -104,7 +104,7 @@ def appointments_single_complete(appointment_id):
     return redirect(url_for("appointments_index"))
 
 
-@app.route("/appointments/admin/<appointment_id>/delete", methods=["POST"])
+@app.route("/appointments/admin/<appointment_id>/delete", methods=["GET"])
 @login_required(role="ADMIN")
 def appointments_single_delete(appointment_id):
     db.session().delete(Appointment.query.get(appointment_id))

@@ -1,21 +1,25 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h3>Available times</h3>
-
-<table>
-  <tr>
-    <th>Date</th>
-  </tr>
+<h3 class="display-5">Available times</h3>
+<ul class="list-group">
+  <li class="list-group-item nav-header bg-light">
+    <div class="row">
+      <div class="col">Time</div>
+      <div class="col"></div>
+    </div>
+  </li>
   {% for time in times %}
-  <tr>
-    <td>{{ time }}</td>
-    <td>
-      <form method="GET" action="{{ url_for('appointments_reserve_form', user_id=user_id, work_day_id=work_day_id, time=time) }}">
-        <input type="submit" value="choose" />
-      </form>
-    </td>
-  </tr>
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col">{{ time }}</div>
+      <div class="col">
+        <form method="GET" action="{{ url_for('appointments_reserve_form', user_id=user_id, work_day_id=work_day_id, time=time) }}">
+          <input type="submit" class="btn btn-primary btn-md" value="Choose" />
+        </form>
+      </div>
+    </div>
+  </li>
   {% endfor %}
-</table>
+</ul>
 {% endblock %}

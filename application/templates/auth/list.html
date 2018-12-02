@@ -1,29 +1,29 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h3>Users</h3>
-
-<table class="table table-sm table-hover">
-  <tr>
-    <thead>
-      <th>Name</th>
-      <th>Username</th>
-      <th>User role</th>
-      <th></th>
-    </thead>
-  </tr>
+<h3 class="display-5">Accounts</h3>
+<ul class="list-group">
+  <li class="list-group-item nav-header bg-light">
+    <div class="row">
+      <div class="col">Name</div>
+      <div class="col">Username</div>
+      <div class="col">User role</div>
+      <div class="col"></div>
+    </div>
+  </li>
   {% for user in users %}
-  <tr>
-    <td>{{ user.name }}</td>
-    <td>{{ user.username }}</td>
-    <td>{{ user.role.name }}</td>
-    <td>
-      <form method="GET" action="{{ url_for('user_single', user_id=user.id) }}">
-        <input type="submit" value="view" />
-      </form>
-    </td>
-    
-  </tr>
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col">{{ user.name }}</div>
+      <div class="col">{{ user.username }}</div>
+      <div class="col">{{ user.role.name }}</div>
+      <div class="col">
+        <form method="GET" action="{{ url_for('user_single', user_id=user.id) }}">
+          <input type="submit" class="btn btn-info btn-md" value="Info" />
+        </form>
+      </div>
+    </div>
+  </li>
   {% endfor %}
-</table>
+</ul>
 {% endblock %}

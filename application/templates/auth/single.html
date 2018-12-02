@@ -1,36 +1,29 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<table>
-  <tr>
-    <td>
-      Name
-    </td>
-    <td>
-      {{ user.name }}
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Username
-    </td>
-    <td>
-      {{ user.username }}
-    </td>
-  </tr>
-</table>
-<table>
-  <tr>
-    <td>
-      <form method="GET" action="{{ url_for('user_change_password', user_id=user.id) }}">
-        <input type="submit" value="change password" />
-      </form>
-    </td>
-    <td>
-      <form method="GET" action="{{ url_for('user_delete', user_id=user.id) }}">
-        <input type="submit" value="delete" />
-      </form>
-    </td>
-  </tr>
-</table>
+<h3 class="display-5">User info</h3>
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">{{ user.name }}</h5>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">Username:</div>
+        <div class="col">{{ user.username }}</div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">User role:</div>
+        <div class="col">{{ user.role.name }}</div>
+      </div>
+    </li>
+  </ul>
+  <div class="card-body">
+    <a href="{{ url_for('user_change_password', user_id=user.id) }}" class="btn btn-secondary btn-md" role="button">Change
+      password</a>
+    <a href="{{ url_for('user_delete', user_id=user.id) }}" class="btn btn-danger btn-md" role="button">Delete</a>
+  </div>
+</div>
 {% endblock %}

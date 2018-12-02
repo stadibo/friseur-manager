@@ -1,8 +1,16 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <h3>Is your hair throwing errors?</h3>
-  <form method="GET" action="{{ url_for('appointments_select_friseur') }}"> 
-    <input type="submit" value="Reserve an appointment"/>
-  </form>
+<div class="jumbotron">
+  <h1 class="display-4">Is your hair throwing errors?</h1>
+  <p class="lead">This is a \\ work in progress \\ description of our groovy friseur salon</p>
+  <hr class="my-4">
+  <p>You can reserve an appointment wether you're logged in or not. Remember to cancel using reservation number if you
+    cannot make it.</p>
+  <div class="lead">
+    <form method="GET" action="{{ url_for('appointments_select_friseur') }}">
+      <input type="submit" class="btn btn-primary btn-lg" value="Reserve an appointment" />
+    </form>
+  </div>
+</div>
 {% endblock %}

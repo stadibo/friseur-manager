@@ -14,6 +14,7 @@ app.config.from_object(Config)
 
 bcrypt = Bcrypt(app)
 csrf = CSRFProtect(app)
+bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 
 # Login functionality

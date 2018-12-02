@@ -1,21 +1,25 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h3>Available friseurs</h3>
-
-<table>
-  <tr>
-    <th>Name</th>
-  </tr>
+<h3 class="display-5">Available friseurs</h3>
+<ul class="list-group">
+  <li class="list-group-item nav-header bg-light">
+    <div class="row">
+      <div class="col">Name</div>
+      <div class="col"></div>
+    </div>
+  </li>
   {% for friseur in friseurs %}
-  <tr>
-    <td>{{ friseur.name }}</td>
-    <td>
-      <form method="GET" action="{{ url_for('appointments_select_date', user_id=friseur.id) }}">
-        <input type="submit" value="choose" />
-      </form>
-    </td>
-  </tr>
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col">{{ friseur.name }}</div>
+      <div class="col">
+        <form method="GET" action="{{ url_for('appointments_select_date', user_id=friseur.id) }}">
+          <input type="submit" class="btn btn-primary btn-md" value="Choose" />
+        </form>
+      </div>
+    </div>
+  </li>
   {% endfor %}
-</table>
+</ul>
 {% endblock %}

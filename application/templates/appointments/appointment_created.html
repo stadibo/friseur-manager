@@ -1,18 +1,14 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<table class="table">
-  <tr>
-    <td>
-      Your reservation number is:
-    </td>
-    <td>
-      {{ reservation_number }}
-    </td>
-  </tr>
-</table>
-
-<form method="GET" action="{{ url_for('index') }}">
-  <input type="submit" value="Back to front page" />
-</form>
+<h3 class="display-5">Reservation successful</h3>
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Your reservation number is:</h5>
+    <h5 class="card-subtitle">{{ reservation_number }}</h5>
+  </div>
+  <div class="card-body">
+    <a href="{{ url_for('index') }}" class="btn btn-success btn-md" role="button">Back to front page</a>
+  </div>
+</div>
 {% endblock %}

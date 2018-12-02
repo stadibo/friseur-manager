@@ -45,6 +45,7 @@ def auth_register():
     if user:
         return render_template("auth/new_user.html", form=form)
 
+    # Encrypt password
     password_hash = bcrypt.generate_password_hash(form.password.data)
     user = User(form.name.data, form.username.data, password_hash)
 
@@ -78,6 +79,7 @@ def auth_new_friseur():
         print("password not same")
         return render_template("auth/new_friseur.html", form=form)
 
+    # Encrypt password and assign friseur role
     password_hash = bcrypt.generate_password_hash(form.password.data)
     user = User(form.name.data, form.username.data, password_hash)
     user.role = Role.query.get(2)
@@ -126,18 +128,12 @@ def user_change_password(user_id):
     form = PasswordForm(request.form)
 
     if not form.validate():
-        print("Validate error")
         return render_template("auth/edit_password.html", form=form, user_id=user_id)
 
-    if form.new_password.data != form.passwordConfirmation.data:
-        print("password not same")
-        return render_template("auth/edit_password.html", form=form, user_id=user_id, error="confirmation does not match")
+    if user is None or not bcrypt.check_password_hash(user.password, form.old_password.data):
+        return render_template("auth/edit_password.html", form=form, user_id=user_id)
 
-    if form.old_password.data != user.password:
-        print("old password not same")
-        return render_template("auth/edit_password.html", form=form, user_id=user_id, error="old password does not match")
-
-    user.password = form.new_password.data
+    user.password = bcrypt.generate_password_hash(form.new_password.data)
 
     db.session().commit()
 
