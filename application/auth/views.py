@@ -16,14 +16,17 @@ def auth_login():
 
     form = LoginForm(request.form)
 
-    user = User.query.filter_by(username=form.username.data).first()
+    if form.validate():
+        user = User.query.filter_by(username=form.username.data).first()
 
-    if user is None or not bcrypt.check_password_hash(user.password, form.password.data):
-        return render_template("auth/loginform.html", form=form, error="No such username or password")
+        if user is None or not bcrypt.check_password_hash(user.password, form.password.data):
+            return render_template("auth/loginform.html", form=form, error="No such username or password")
 
-    login_user(user)
+        login_user(user)
 
-    return redirect(url_for("index"))
+        return redirect(url_for("index"))
+    
+    return render_template("auth/loginform.html", form=form)
 
 
 # Route to display and handle the page for creating new users
@@ -75,7 +78,8 @@ def auth_new_friseur():
         print("password not same")
         return render_template("auth/new_friseur.html", form=form)
 
-    user = User(form.name.data, form.username.data, form.password.data)
+    password_hash = bcrypt.generate_password_hash(form.password.data)
+    user = User(form.name.data, form.username.data, password_hash)
     user.role = Role.query.get(2)
 
     db.session().add(user)

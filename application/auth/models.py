@@ -8,7 +8,7 @@ class User(Base):
 
     name = db.Column(db.String(144), nullable=False)
     username = db.Column(db.String(144), nullable=False, unique=True)
-    password = db.Column(db.String(256), nullable=False)
+    password = db.Column(db.Binary(72), nullable=False)
 
     role_id = db.Column(db.Integer, db.ForeignKey("role.id"), nullable=True)
     role = db.relationship("Role")
