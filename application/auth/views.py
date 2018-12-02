@@ -58,7 +58,12 @@ def auth_register():
     db.session().add(user)
     db.session().commit()
 
-    return redirect(url_for("auth_login"))
+    # Log in user
+    created_user = User.query.filter_by(username=user.username).first()
+
+    login_user(created_user)
+    # return redirect(url_for("auth_login"))
+    return redirect(url_for("index"))
 
 
 # Route to display and handle the page for an admin to create a new employee level user
