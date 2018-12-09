@@ -73,13 +73,17 @@ $ heroku login
 ```
 
 **Step 4:** Navigate to the directory in which you installed the project
+
 *Replace directoryName with the path to your directory*
+
 ```
 $ cd ~/directoryName
 ```
 
 **Step 5:** Create a heroku project
+
 *Replace appName with a name by which the project shall be created*
+
 ```
 $ heroku create appName
 ```
@@ -102,3 +106,7 @@ There is now a working database for the application. It can be accessed from the
 ```
 $ heroku pg:psql
 ```
+
+**Step 8:** Add __admin__ user to application.
+
+Navigate to the address http://yourAppName.herokuapp.com/ *(replace yourAppName with the name you gave to the project)* in a browser of your choosing. Click on the register button in the top right corner. The first user to be created is assigned to the __admin__ role.
