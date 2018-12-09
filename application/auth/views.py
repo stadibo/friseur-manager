@@ -160,30 +160,6 @@ def user_change_password(user_id):
     return redirect(url_for("users_index"))
 
 
-
-# @app.route("/auth/admin/<user_id>/single/change_password", methods=["GET", "POST"])
-# @login_required(role="ADMIN")
-# def user_change_password(user_id):
-#     user = User.query.get(user_id)
-#     if request.method == "GET":
-#         form = PasswordForm()
-#         return render_template("auth/edit_password.html", form=form, user_id=user_id)
-
-#     form = PasswordForm(request.form)
-
-#     if not form.validate():
-#         return render_template("auth/edit_password.html", form=form, user_id=user_id)
-
-#     if user is None or not bcrypt.check_password_hash(user.password, form.old_password.data):
-#         return render_template("auth/edit_password.html", form=form, user_id=user_id)
-
-#     user.password = bcrypt.generate_password_hash(form.new_password.data)
-
-#     db.session().commit()
-
-#     return redirect(url_for("users_index"))
-
-
 # Route for an admin to delete a user other than the admin themselves
 
 @app.route("/auth/admin/<user_id>/single/delete", methods=["GET"])

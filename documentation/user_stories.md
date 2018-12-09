@@ -13,16 +13,16 @@
 
 ### As a user I want to be able to:
 - reserve an appointment so that I can get a haircut. (COMPLETE)
-- change my reservation so that it fits my schedule better. (TODO)
-- cancel my appointment so that a friseur does not expect me in vain. (TODO)
+- change my reservation so that it fits my schedule better. (COMPLETE)
+- cancel my appointment so that a friseur does not expect me in vain. (COMPLETE)
 - choose who will cut my hair so that I am comfortable with their decisions. (COMPLETE)
 - sign up for loyalty account so that I get a discount for supporting the business in question. (COMPLETE)
-- update the information of my account. (TODO)
-- delete my account when I no longer want my information used by this business. (TODO)
+- update the information of my account. (COMPLETE)
+- delete my account when I no longer want my information used by this business. (WORK IN PROGRESS: Not yet GDPR compliant, send email to management to delete account)
 
 ### As a friseur I want to be able to:
 - change my working hours so that I can adjust for changes in life. (TODO)
-- cancel appointments with me so that I can adjust for emergencies. (TODO)
+- cancel appointments with me so that I can adjust for emergencies. (COMPLETE)
 - create an appointment so that appointments of customers’ who call by phone can be added to the system. (COMPLETE)
 - view a summary of my earnings for a set time period. (TODO)
-- view my upcoming appointments. (WORK IN PROGRESS)
+- view my appointments. (COMPLETE)

@@ -58,7 +58,7 @@ class Appointment(Base):
 
         response = []
         for row in res:
-            # Cheack type of object because of difference in returned object between development db and production db
+            # Check type of object because of difference in returned object between development db and production db
             if isinstance(row[0], datetime.time):
                 time = row[0].strftime("%H:%M")
             else:
@@ -83,7 +83,7 @@ class Appointment(Base):
 
         response = []
         for row in res:
-            # Cheack type of object because of difference in returned object between development db and production db
+            # Check type of object because of difference in returned object between development db and production db
             if isinstance(row[0], datetime.time):
                 time = row[0].strftime("%H:%M")
             else:
@@ -114,7 +114,7 @@ class Appointment(Base):
 
         response = []
         for row in res:
-            # Cheack type of object because of difference in returned object between development db and production db
+            # Check type of object because of difference in returned object between development db and production db
             if isinstance(row[0], datetime.time):
                 time = row[0].strftime("%H:%M")
             else:
@@ -145,7 +145,7 @@ class Appointment(Base):
 
         response = []
         for row in res:
-            # Cheack type of object because of difference in returned object between development db and production db
+            # Check type of object because of difference in returned object between development db and production db
             if isinstance(row[0], datetime.time):
                 time = row[0].strftime("%H:%M")
             else:
@@ -176,7 +176,7 @@ class Appointment(Base):
 
         response = []
         for row in res:
-            # Cheack type of object because of difference in returned object between development db and production db
+            # Check type of object because of difference in returned object between development db and production db
             if isinstance(row[0], datetime.time):
                 time = row[0].strftime("%H:%M")
             else:
