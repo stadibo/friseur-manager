@@ -27,7 +27,9 @@ def work_days_index():
     current_date = datetime.now()
     new_date = datetime.combine(form.date.data, datetime.min.time())
 
-    if current_date > new_date:
+    work_day = Work_day.query.filter_by(date=new_date).first()
+
+    if current_date > new_date or work_day:
         return render_template("work_days/list.html", form=form, work_days=work_days_with_amount)
 
     work_day = Work_day(new_date)
