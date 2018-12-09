@@ -84,6 +84,10 @@ def auth_new_friseur():
     if form.password.data != form.passwordConfirmation.data:
         print("password not same")
         return render_template("auth/new_friseur.html", form=form)
+    
+    user = User.query.filter_by(username=form.username.data).first()
+    if user:
+        return render_template("auth/new_user.html", form=form)
 
     # Encrypt password and assign friseur role
     password_hash = bcrypt.generate_password_hash(form.password.data)
