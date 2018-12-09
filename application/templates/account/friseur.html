@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h3 class="display-5">User info</h3>
+<div class="card" style="">
+  <div class="card-body">
+    <h2 class="card-title">{{ user.name }}</h2>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">Username:</div>
+        <div class="col">{{ user.username }}</div>
+      </div>
+    </li>
+  </ul>
+  <div class="card-body">
+    <a href="{{ url_for('account_change_password') }}" class="btn btn-secondary btn-md" role="button">Change
+      password</a>
+  </div>
+</div>
+<div class="container">
+  <h3 id="single_user_appointments" class="display-5">Appointments</h3>
+  <table class="table table-sm table-hover">
+    <tr>
+      <td>
+        Amount of upcoming appointments for user:
+      </td>
+      <td>
+        <strong>{{ upcoming }}</strong>
+      </td>
+    </tr>
+  </table>
+  <ul class="list-group">
+    <li class="list-group-item nav-header bg-light">
+      <div class="row">
+        <div class="col-4">Date / Time</div>
+        <div class="col">Res.No.</div>
+        <div class="col">Fulfilled</div>
+        <div class="col"></div>
+      </div>
+    </li>
+    {% for appointment in appointments %}
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-4">{{ appointment.date + " / " + appointment.time_reserved }}</div>
+        <div class="col">{{ appointment.reservation_number }}</div>
+        <div class="col">{{ appointment.fulfilled }}</div>
+        <div class="col">
+          <form method="GET" action="{{ url_for('account_appointments_single', appointment_id=appointment.id) }}">
+            <input type="submit" class="btn btn-info btn-md" value="Info" />
+          </form>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

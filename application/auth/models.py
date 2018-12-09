@@ -31,6 +31,39 @@ class User(Base):
 
     def is_authenticated(self):
         return True
+
+    @staticmethod
+    def has_appointment(appointment_id, user_id):
+        stmt = text("SELECT * "
+                    "FROM account_appointment, account "
+                    "WHERE account_appointment.account_id = :user "
+                    "AND account_appointment.appointment_id = :appointment "
+                    "AND account.id = :user;").params(user=user_id, appointment=appointment_id)
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"count": row[0]})
+
+        print(len(response))
+        
+        return len(response) > 0
+
+    # @staticmethod
+    # def customer_has_appointment(appointment_id, user_id):
+    #     stmt = text("SELECT COUNT(*) AS count "
+    #                 "FROM account_appointment, account "
+    #                 "WHERE account_appointment.account_id = :user "
+    #                 "AND account_appointment.appointment_id = :appointment "
+    #                 "AND account.id = :user "
+    #                 "AND account.role_id = 1;").params(user=user_id, appointment=appointment_id)
+    #     res = db.engine.execute(stmt)
+
+    #     response = []
+    #     for row in res:
+    #         response.append({"count": row[0]})
+        
+    #     return response
         
 
 class Role(db.Model):

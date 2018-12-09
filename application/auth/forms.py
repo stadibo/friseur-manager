@@ -34,3 +34,13 @@ class PasswordForm(FlaskForm):
     confirm = SubmitField("Confirm")
     # class Meta:
     #     csrf = False
+
+# Form for changing password
+class AdminPasswordForm(FlaskForm):
+    new_password = PasswordField("New password", [validators.DataRequired(), validators.Length(min=8, max=50)])
+    passwordConfirmation = PasswordField(
+        "Confirm new password", [validators.DataRequired(), validators.Length(min=8, max=50), validators.EqualTo("new_password", message="Passwords do not match")])
+
+    confirm = SubmitField("Confirm")
+    # class Meta:
+    #     csrf = False

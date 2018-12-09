@@ -57,6 +57,8 @@ from application import views
 from application.auth import views
 from application.auth import models
 
+from application.account import views
+
 from application.appointments import models
 from application.appointments import views
 
