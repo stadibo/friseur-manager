@@ -98,19 +98,22 @@ def appointments_reserve_form(user_id, work_day_id, time):
 @login_required(role="ADMIN")
 def appointments_single(appointment_id):
     appointment = Appointment.query.get(appointment_id)
-    date = Work_day.query.get(appointment.work_day_id)
-    return render_template("appointments/single.html", appointment=appointment, date=date)
+    if appointment:
+      date = Work_day.query.get(appointment.work_day_id)
+      return render_template("appointments/single.html", appointment=appointment, date=date)
+    return redirect(url_for("appointments_index"))
 
     
 @app.route("/appointments/admin/<appointment_id>/single/change_status", methods=["GET"])
 @login_required(role="ADMIN")
 def appointments_single_complete(appointment_id):
     appointment = Appointment.query.get(appointment_id)
-    appointment.fulfilled = not appointment.fulfilled
-    db.session().commit()
+    if appointment:
+      appointment.fulfilled = not appointment.fulfilled
+      db.session().commit()
 
-    return redirect(url_for("appointments_single", appointment_id=appointment_id))
-
+      return redirect(url_for("appointments_single", appointment_id=appointment_id))
+    return redirect(url_for("appointments_index"))
 
 @app.route("/appointments/admin/<appointment_id>/single/delete", methods=["GET"])
 @login_required(role="ADMIN")
