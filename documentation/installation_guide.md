@@ -50,7 +50,7 @@ $ pip freeze | grep -v pkg-resources > requirements.txt
 ```
 **Step 1:** Clone and install the project locally using the above instructions
 
-**Step 2: ** Install the Heroku command line interface (Heroku CLI)
+**Step 2:** Install the Heroku command line interface (Heroku CLI)
 
 Linux:
 
