@@ -55,18 +55,22 @@ def account_change_password():
 @login_required("FRISEUR")
 def account_appointments_single(appointment_id):
     appointment = Appointment.query.get(appointment_id)
-    date = Work_day.query.get(appointment.work_day_id)
-    return render_template("account/friseur_appointment.html", appointment=appointment, date=date)
+    if appointment:
+        date = Work_day.query.get(appointment.work_day_id)
+        return render_template("account/friseur_appointment.html", appointment=appointment, date=date)
+    return redirect(url_for("account_page"))
 
     
 @app.route("/account/appointments/<appointment_id>/single/change_status", methods=["GET"])
 @login_required("FRISEUR")
 def account_appointments_single_complete(appointment_id):
     appointment = Appointment.query.get(appointment_id)
-    appointment.fulfilled = not appointment.fulfilled
-    db.session().commit()
+    if appointment:
+        appointment.fulfilled = not appointment.fulfilled
+        db.session().commit()
 
-    return redirect(url_for("account_appointments_single", appointment_id=appointment_id))
+        return redirect(url_for("account_appointments_single", appointment_id=appointment_id))
+    return redirect(url_for("account_page"))
 
 
 @app.route("/account/appointments/<appointment_id>/single/delete", methods=["GET"])
