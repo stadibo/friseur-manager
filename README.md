@@ -32,3 +32,5 @@ Services are presented on a website and it is possible to make reservations from
 [Setup guide](https://github.com/stadibo/friseurManager/blob/master/documentation/installation_guide.md)
 
 [User guide](https://github.com/stadibo/friseurManager/blob/master/documentation/user_guide.md)
+
+[SQL-create-table](https://github.com/stadibo/friseurManager/blob/master/documentation/SQL_create_table_statements.md)
