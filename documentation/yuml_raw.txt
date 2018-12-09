@@ -1,8 +1,24 @@
-[User | (pk) id; date_created : datetime; date_modified : datetime; name : string; username : string; password : string; email : string; phone : string; user_role : string;],
-[Appointment | (pk) id; (fk) user_id; (fk) employee_id; date_created : datetime; date_modified : datetime; date : datetime; start : datetime; end : datetime; reservation_number : string],
-[WorkDay | (pk) id; date_created : datetime; date_modified : datetime; date : datetime;],
-[EmployeeWorkDay | (fk) work_day_id; (fk) employee_id; start : datetime; end : datetime;]
+[account | (pk) id : integer; (fk) role_id : integer; date_created : datetime; date_modified : datetime; name : string; username : string; password : binary;], , 
 
-[User |]2-*[Appointment |],
-[User |]1-*[EmployeeWorkDay |],
-[WorkDay |]1-*[EmployeeWorkDay |]
+[appointment | (pk) id : integer; (fk) work_day_id : integer; date_created : datetime; date_modified : datetime; time_reserved : time; duration : integer; customer : string; reservation_number : string; fulfilled : boolean], 
+
+[work_day | (pk) id : integer; date_created : datetime; date_modified : datetime; date : datetime;],
+
+[friseur_work_day | (pk) (work_day_id account_id); (fk) work_day_id : integer; (fk) account_id : integer; start : integer; finish : integer;],
+
+[role | (pk) id : integer; name : string;],
+
+[account_appointment | (pk) account_id appointment_id : integer; (fk) account_id : integer; (fk) appointment_id : integer],
+
+[account_appointment |],
+[role |],
+[friseur_work_day |],
+[work_day |],
+[appointment |],
+[account |],
+[account |]1-*[account_appointment |],
+[account_appointment |]*-1[appointment |],
+[account |]1-*[friseur_work_day |],
+[work_day |]1-*[friseur_work_day |],
+[work_day |]1-*[appointment |],
+[account |]*-1[role |]
