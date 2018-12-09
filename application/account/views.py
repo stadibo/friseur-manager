@@ -82,4 +82,4 @@ def account_appointments_single_delete(appointment_id):
     if appointment and has_appointment:
       db.session().delete(appointment)
       db.session().commit()
-      return redirect(url_for("account_page"))
+    return redirect(url_for("account_page"))
