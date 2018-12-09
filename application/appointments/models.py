@@ -77,8 +77,7 @@ class Appointment(Base):
                     "LEFT JOIN account_appointment "
                     "ON account_appointment.appointment_id = appointment.id "
                     "LEFT JOIN account "
-                    "ON account_appointment.account_id = account.id "
-                    "AND account.role_id = 2 "
+                    "ON account.role_id = 2 "
                     "ORDER BY work_day.date DESC ;")
         res = db.engine.execute(stmt)
 
@@ -107,9 +106,9 @@ class Appointment(Base):
                     "INNER JOIN account_appointment "
                     "ON account_appointment.appointment_id = appointment.id "
                     "INNER JOIN account "
-                    "ON account_appointment.account_id = :user "
+                    "ON account.id = :user "
                     "WHERE account.role_id = 2 "
-                    "AND account.id = :user "
+                    "AND account_appointment.account_id = :user "
                     "ORDER BY work_day.date ASC ;").params(user=user_id)
         res = db.engine.execute(stmt)
 
@@ -138,9 +137,9 @@ class Appointment(Base):
                     "INNER JOIN account_appointment "
                     "ON account_appointment.appointment_id = appointment.id "
                     "INNER JOIN account "
-                    "ON account_appointment.account_id = :user "
+                    "ON account.id = :user "
                     "WHERE account.role_id = 1 "
-                    "AND account.id = :user "
+                    "AND account_appointment.account_id = :user "
                     "ORDER BY work_day.date ASC ;").params(user=user_id)
         res = db.engine.execute(stmt)
 

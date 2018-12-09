@@ -56,7 +56,7 @@ def account_change_password():
 def account_appointments_single(appointment_id):
     appointment = Appointment.query.get(appointment_id)
     date = Work_day.query.get(appointment.work_day_id)
-    return render_template("appointments/single.html", appointment=appointment, date=date)
+    return render_template("account/friseur_appointment.html", appointment=appointment, date=date)
 
     
 @app.route("/account/appointments/<appointment_id>/single/change_status", methods=["GET"])
