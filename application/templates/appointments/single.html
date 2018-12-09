@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h3 class="display-5">Appointment info</h3>
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Reservation number: {{ appointment.reservation_number }}</h5>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">Date:</div>
+        <div class="col">{{ date }}</div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">Time:</div>
+        <div class="col">{{ appointment.get_time() }}</div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">Friseur:</div>
+        <div class="col">{{ appointment.get_friseur() }}</div>
+      </div>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">Customer:</div>
+        <div class="col">{{ appointment.get_customer() }}</div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">Fulfilled:</div>
+        <div class="col">{{ appointment.fulfilled }}</div>
+      </div>
+    </li>
+  </ul>
+  <div class="card-body">
+    <a href="{{ url_for('appointments_single_complete', appointment_id=appointment.id) }}" class="btn btn-secondary btn-md" role="button">
+      {% if appointment.fulfilled %}
+      Set as fulfilled
+      {% else %}
+      Set as not fulfilled
+      {% endif %}
+    </a>
+    <a href="{{ url_for('appointments_single_delete', appointment_id=appointment.id) }}" class="btn btn-danger btn-md" role="button">Delete</a>
+  </div>
+</div>
+{% endblock %}

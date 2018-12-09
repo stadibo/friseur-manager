@@ -39,8 +39,8 @@ def appointments_select_time(user_id, work_day_id):
 
     # Display only open timeslots
     for timeslot in range(10, 18):
-        if datetime.time(timeslot, 0) not in friseur_times:
-            available_times.append(datetime.time(timeslot, 0))
+        if datetime.time(timeslot) not in friseur_times:
+            available_times.append(datetime.time(timeslot).strftime("%H:%M"))
 
     return render_template("appointments/select_time.html", user_id=user_id, work_day_id=work_day_id, times=available_times)
 
@@ -94,19 +94,29 @@ def appointments_reserve_form(user_id, work_day_id, time):
     return render_template("appointments/appointment_created.html", reservation_number=res_nr)
 
 
-@app.route("/appointments/admin/<appointment_id>/complete", methods=["GET"])
+@app.route("/appointments/admin/<appointment_id>/single", methods=["GET"])
+@login_required(role="ADMIN")
+def appointments_single(appointment_id):
+    appointment = Appointment.query.get(appointment_id)
+    date = Work_day.query.get(appointment.work_day_id)
+    return render_template("appointments/single.html", appointment=appointment, date=date)
+
+    
+@app.route("/appointments/admin/<appointment_id>/single/change_status", methods=["GET"])
 @login_required(role="ADMIN")
 def appointments_single_complete(appointment_id):
     appointment = Appointment.query.get(appointment_id)
-    appointment.fulfilled = True
+    appointment.fulfilled = not appointment.fulfilled
     db.session().commit()
 
-    return redirect(url_for("appointments_index"))
+    return redirect(url_for("appointments_single", appointment_id=appointment_id))
 
 
-@app.route("/appointments/admin/<appointment_id>/delete", methods=["GET"])
+@app.route("/appointments/admin/<appointment_id>/single/delete", methods=["GET"])
 @login_required(role="ADMIN")
 def appointments_single_delete(appointment_id):
-    db.session().delete(Appointment.query.get(appointment_id))
-    db.session().commit()
-    return redirect(url_for("appointments_index"))
+    appointment = Appointment.query.get(appointment_id)
+    if appointment:
+      db.session().delete(appointment)
+      db.session().commit()
+      return redirect(url_for("appointments_index"))

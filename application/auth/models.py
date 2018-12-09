@@ -1,6 +1,6 @@
 from application import db
 from application.models import Base
-
+from sqlalchemy.sql import text
 
 class User(Base):
 
@@ -31,7 +31,7 @@ class User(Base):
 
     def is_authenticated(self):
         return True
-
+        
 
 class Role(db.Model):
 

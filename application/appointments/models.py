@@ -25,7 +25,26 @@ class Appointment(Base):
         self.customer = customer
         self.reservation_number = reservation_number
         self.fulfilled = fulfilled
+    
+    def get_time(self):
+        if isinstance(self.time_reserved, datetime.time):
+            time = self.time_reserved.strftime("%H:%M")
+        else:
+            time = self.time_reserved[0:5]
+        return time
 
+    def get_customer(self):
+        for user in self.users:
+            if user.role.name == "USER":
+                return user.name
+        return self.customer
+
+    def get_friseur(self):
+        for user in self.users:
+            if user.role.name == "FRISEUR":
+                return user.name
+
+    
     @staticmethod
     def account_appointment_for_day(user_id, work_day_id):
         stmt = text("SELECT appointment.time_reserved, appointment.duration, appointment.customer, appointment.reservation_number, appointment.fulfilled "
@@ -41,9 +60,9 @@ class Appointment(Base):
         for row in res:
             # Cheack type of object because of difference in returned object between development db and production db
             if isinstance(row[0], datetime.time):
-                time = row[0].strftime("%H:%M:%S")
+                time = row[0].strftime("%H:%M")
             else:
-                time = row[0][0:8]
+                time = row[0][0:5]
             response.append({"time_reserved": time, "duration": row[1], "customer": row[2], "reservation_number": row[3], "fulfilled": row[4]})
         
         return response
@@ -96,9 +115,40 @@ class Appointment(Base):
         for row in res:
             # Cheack type of object because of difference in returned object between development db and production db
             if isinstance(row[0], datetime.time):
-                time = row[0].strftime("%H:%M:%S")
+                time = row[0].strftime("%H:%M")
             else:
-                time = row[0][0:8]
+                time = row[0][0:5]
+            if isinstance(row[7], datetime.datetime):
+                date = row[7].strftime("%Y-%m-%d")
+            else:
+                date = row[7][0:10]
+            
+            response.append({"time_reserved": time, "duration": row[1], "customer": row[2], "reservation_number": row[3], "friseur": row[4], "fulfilled": row[5], "id": row[6], "date": date})
+        
+        return response
+
+    @staticmethod
+    def account_full_appointment_data(user_id):
+        stmt = text("SELECT DISTINCT appointment.time_reserved, appointment.duration, appointment.customer, appointment.reservation_number, account.name, appointment.fulfilled, appointment.id, work_day.date "
+                    "FROM appointment "
+                    "INNER JOIN work_day "
+                    "ON appointment.work_day_id = work_day.id "
+                    "LEFT JOIN account_appointment "
+                    "ON account_appointment.appointment_id = appointment.id "
+                    "LEFT JOIN account "
+                    "ON account_appointment.account_id = account.id "
+                    "WHERE account.role_id = 2 "
+                    "AND account.id = :user "
+                    "ORDER BY work_day.date ASC ;").params(user=user_id)
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            # Cheack type of object because of difference in returned object between development db and production db
+            if isinstance(row[0], datetime.time):
+                time = row[0].strftime("%H:%M")
+            else:
+                time = row[0][0:5]
             if isinstance(row[7], datetime.datetime):
                 date = row[7].strftime("%Y-%m-%d")
             else:

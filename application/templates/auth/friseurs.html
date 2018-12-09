@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h3 class="display-5">Friseurs</h3>
+<form id="new_friseur" method="GET" action="{{ url_for('auth_new_friseur') }}">
+  <input type="submit" class="btn btn-primary btn-md" value="New friseur" />
+</form>
+<ul class="list-group">
+  <li class="list-group-item nav-header bg-light">
+    <div class="row">
+      <div class="col">Name</div>
+      <div class="col">Username</div>
+      <div class="col"></div>
+      <div class="col"></div>
+    </div>
+  </li>
+  {% for friseur in friseurs %}
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col">{{ friseur.name }}</div>
+      <div class="col">{{ friseur.username }}</div>
+      <div class="col"></div>
+      <div class="col">
+        <form method="GET" action="{{ url_for('user_single', user_id=friseur.id) }}">
+          <input type="submit" class="btn btn-info btn-md" value="Info" />
+        </form>
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

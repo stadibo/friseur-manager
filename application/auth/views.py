@@ -5,6 +5,7 @@ from application import app, db, login_required, login_manager, bcrypt
 from application.auth.models import User, Role
 from application.work_days.models import Work_day, Friseur_work_day
 from application.auth.forms import UserForm, LoginForm, PasswordForm
+from application.appointments.models import Appointment
 
 
 # Route to display and handle the login page
@@ -111,13 +112,19 @@ def users_index():
     return render_template("auth/list.html", users=User.query.order_by("role_id").all())
 
 
+@app.route("/auth/admin/friseurs", methods=["GET"])
+@login_required(role="ADMIN")
+def friseur_index():
+    return render_template("auth/friseurs.html", friseurs=User.query.filter_by(role_id=2).all())
+
+
 # Route to display the page for showing information about a single user
 
 @app.route("/auth/admin/<user_id>/single", methods=["GET"])
 @login_required(role="ADMIN")
 def user_single(user_id):
     user = User.query.get(user_id)
-    return render_template("auth/single.html", user=user, appointments=user.appointments, upcoming=len(user.appointments))
+    return render_template("auth/single.html", user=user, appointments=Appointment.account_full_appointment_data(user.id), upcoming=len(user.appointments))
 
 
 # Route to display and handle the page for an admin to change the password of a user

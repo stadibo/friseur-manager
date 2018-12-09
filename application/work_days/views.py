@@ -11,20 +11,24 @@ from datetime import datetime, date
 @app.route("/workdays/admin/all", methods=["GET", "POST"])
 @login_required(role="ADMIN")
 def work_days_index():
+    work_days = Work_day.query.order_by(Work_day.date.asc()).all()
+    work_days_with_amount = []
+    for work_day in work_days:
+        work_days_with_amount.append({"work_day": work_day, "amount": len(work_day.appointments)})
+
     if request.method == "GET":
-        return render_template("work_days/list.html", form=WorkdayForm(),  work_days=Work_day.query.order_by(Work_day.date.asc()).all())
+        return render_template("work_days/list.html", form=WorkdayForm(), work_days=work_days_with_amount)
 
     form = WorkdayForm(request.form)
 
     if not form.validate():
-        print("Validate error")
-        return render_template("work_days/list.html", form=form, work_days=Work_day.query.all())
+        return render_template("work_days/list.html", form=form, work_days=work_days_with_amount)
 
     current_date = datetime.now()
     new_date = datetime.combine(form.date.data, datetime.min.time())
 
     if current_date > new_date:
-        return render_template("work_days/list.html", form=form, work_days=Work_day.query.all())
+        return render_template("work_days/list.html", form=form, work_days=work_days_with_amount)
 
     work_day = Work_day(new_date)
     db.session().add(work_day)

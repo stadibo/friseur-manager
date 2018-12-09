@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<table class="table table-sm table-hover" style="width: 30%">
+<table class="table table-sm table-hover">
   <tr>
     <td>
       Amount of upcoming appointments:
@@ -19,39 +19,30 @@
     </td>
   </tr>
 </table>
+
 <h3 class="display-5">Appointments</h3>
-<table class="table table-sm table-hover" style="width: 100%">
-  <tr>
-    <thead>
-      <th>Date</th>
-      <th>Time</th>
-      <th>Customer</th>
-      <th>Res.No.</th>
-      <th>Friseur</th>
-      <th>Fulfilled</th>
-      <th></th>
-      <th></th>
-    </thead>
-  </tr>
+<ul class="list-group">
+  <li class="list-group-item nav-header bg-light">
+    <div class="row">
+      <div class="col-4">Date / Time</div>
+      <div class="col">Friseur</div>
+      <div class="col">Fulfilled</div>
+      <div class="col"></div>
+    </div>
+  </li>
   {% for appointment in appointments %}
-  <tr>
-    <td>{{ appointment.date }}</td>
-    <td>{{ appointment.time_reserved }}</td>
-    <td>{{ appointment.customer }}</td>
-    <td>{{ appointment.reservation_number }}</td>
-    <td>{{ appointment.friseur }}</td>
-    <td>{{ appointment.fulfilled }}</td>
-    <td>
-      <form method="GET" action="{{ url_for('appointments_single_complete', appointment_id=appointment.id) }}">
-        <input type="submit" class="btn btn-secondary btn-sm" value="set as fulfilled" />
-      </form>
-    </td>
-    <td>
-      <form method="GET" action="{{ url_for('appointments_single_delete', appointment_id=appointment.id) }}">
-        <input type="submit" class="btn btn-danger btn-sm" value="delete" />
-      </form>
-    </td>
-  </tr>
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-4">{{ appointment.date + " / " + appointment.time_reserved }}</div>
+      <div class="col">{{ appointment.friseur }}</div>
+      <div class="col">{{ appointment.fulfilled }}</div>
+      <div class="col">
+        <form method="GET" action="{{ url_for('appointments_single', appointment_id=appointment.id) }}">
+          <input type="submit" class="btn btn-info btn-md" value="Info" />
+        </form>
+      </div>
+    </div>
+  </li>
   {% endfor %}
-</table>
+</ul>
 {% endblock %}
