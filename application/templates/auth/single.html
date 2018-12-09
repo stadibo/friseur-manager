@@ -26,7 +26,7 @@
     <a href="{{ url_for('user_delete', user_id=user.id) }}" class="btn btn-danger btn-md" role="button">Delete</a>
   </div>
 </div>
-{% if user.role.name == "FRISEUR" %}
+{% if user.role.name == "FRISEUR" or user.role.name == "USER" %}
 <div class="container">
   <h3 id="single_user_appointments" class="display-5">Appointments</h3>
   <table class="table table-sm table-hover">
@@ -43,7 +43,7 @@
     <li class="list-group-item nav-header bg-light">
       <div class="row">
         <div class="col-4">Date / Time</div>
-        <div class="col">Friseur</div>
+        <div class="col">Res.No.</div>
         <div class="col">Fulfilled</div>
         <div class="col"></div>
       </div>
@@ -52,7 +52,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col-4">{{ appointment.date + " / " + appointment.time_reserved }}</div>
-        <div class="col">{{ appointment.friseur }}</div>
+        <div class="col">{{ appointment.reservation_number }}</div>
         <div class="col">{{ appointment.fulfilled }}</div>
         <div class="col">
           <form method="GET" action="{{ url_for('appointments_single', appointment_id=appointment.id) }}">

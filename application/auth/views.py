@@ -124,7 +124,13 @@ def friseur_index():
 @login_required(role="ADMIN")
 def user_single(user_id):
     user = User.query.get(user_id)
-    return render_template("auth/single.html", user=user, appointments=Appointment.account_full_appointment_data(user.id), upcoming=len(user.appointments))
+    appointments = []
+    if user.role.name == "FRISEUR":
+        appointments = Appointment.friseur_full_appointment_data(user.id)
+    else:
+        appointments = Appointment.customer_full_appointment_data(user.id)
+
+    return render_template("auth/single.html", user=user, appointments=appointments, upcoming=len(user.appointments))
 
 
 # Route to display and handle the page for an admin to change the password of a user

@@ -39,7 +39,7 @@
   </ul>
   <div class="card-body">
     <a href="{{ url_for('appointments_single_complete', appointment_id=appointment.id) }}" class="btn btn-secondary btn-md" role="button">
-      {% if appointment.fulfilled %}
+      {% if not appointment.fulfilled %}
       Set as fulfilled
       {% else %}
       Set as not fulfilled
