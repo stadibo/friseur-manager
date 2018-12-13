@@ -58,7 +58,7 @@ def work_days_info(work_day_id):
     if work_day:
         appointments = Appointment.work_day_appointment_data(work_day_id)
         average = Work_day.average_amount_of_appointments_for_day(work_day_id)
-        return render_template("work_days/single.html", appointments=appointments, average_amount=average, amount=len(appointments))
+        return render_template("work_days/single.html", appointments=appointments, average_amount=average, amount=len(appointments), date=work_day)
     
     return redirect(url_for("work_days_index"))
 

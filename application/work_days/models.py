@@ -48,7 +48,7 @@ class Work_day(Base):
                         "AND appointment.work_day_id = :id "
                         "WHERE account.role_id = 2 "
                         "GROUP BY account.id"
-                    ");").params(id=work_day_id)
+                    ") AS appointment_per_account_for_day;").params(id=work_day_id)
         res = db.engine.execute(stmt)
 
         response = []
