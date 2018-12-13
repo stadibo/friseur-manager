@@ -55,7 +55,7 @@ class Work_day(Base):
         for row in res:
             response.append({"average_amount": row[0]})
         
-        return response[0].get("average_amount")
+        return "{0:.1f}".format(response[0].get("average_amount"))
 
 class Friseur_work_day(db.Model):
     user_id = db.Column("account_id", db.Integer, db.ForeignKey("account.id"), primary_key=True)
