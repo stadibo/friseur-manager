@@ -38,14 +38,17 @@
     </li>
   </ul>
   <div class="card-body">
-    <a href="{{ url_for('account_appointments_single_complete', appointment_id=appointment.id) }}" class="btn btn-secondary btn-md" role="button">
+    <a href="{{ url_for('account_appointments_single_complete', appointment_id=appointment.id) }}" class="btn btn-secondary btn-md"
+      role="button">
       {% if not appointment.fulfilled %}
       Set as fulfilled
       {% else %}
       Set as not fulfilled
       {% endif %}
     </a>
-    <a href="{{ url_for('account_appointments_single_delete', appointment_id=appointment.id) }}" class="btn btn-danger btn-md" role="button">Delete</a>
+    <a href="{{ url_for('account_appointments_single_delete', appointment_id=appointment.id) }}" class="btn btn-danger btn-md"
+      role="button">Delete</a>
+    <a href="{{ url_for('account_page') }}" class="btn btn-info btn-md" role="button" style="float: right;">Show all</a>
   </div>
 </div>
 {% endblock %}

@@ -6,9 +6,7 @@ class WorkdayForm(FlaskForm):
   date = DateField("New work day", format="%Y-%m-%d")
   
   create = SubmitField("Create")
-
-  # class Meta:
-  #   csrf = False
+  
 
 class MultipleWorkdayForm(FlaskForm):
   date = DateField("Start from date")

@@ -67,7 +67,6 @@ from application.work_days import views
 
 from application.auth.models import User, Role
 
-
 # database table creation
 try:
     db.create_all()

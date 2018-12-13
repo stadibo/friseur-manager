@@ -6,6 +6,3 @@ class AppointmentForm(FlaskForm):
     customer = StringField("Name", [validators.Length(min=2, max=25)])
     
     confirm = SubmitField("Confirm")
-
-    # class Meta:
-    #     csrf = False

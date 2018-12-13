@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, url_for, flash
 from flask_login import login_user, logout_user, current_user
 
 from application import app, db, login_required, login_manager, bcrypt
@@ -25,6 +25,7 @@ def auth_login():
 
         login_user(user)
 
+        flash("Successful login. Welcome to the salon.", "alert-success")
         return redirect(url_for("index"))
     
     return render_template("auth/loginform.html", form=form)
@@ -44,6 +45,7 @@ def auth_register():
 
     user = User.query.filter_by(username=form.username.data).first()
     if user:
+        flash("Username exists, pick another one", "alert-warning")
         return render_template("auth/new_user.html", form=form)
 
     # Encrypt password
@@ -53,9 +55,11 @@ def auth_register():
     # if this is first user make them an admin
     if User.query.count() == 0:
         user.role = Role.query.get(3) # admin
+        flash("First user created! User %s has been assigned as administrator." % user.username)
     else:
         user.role = Role.query.get(1) # user
-
+        flash("New user created. Welcome %s" % user.name, "alert-success")
+    
     db.session().add(user)
     db.session().commit()
 
@@ -63,7 +67,8 @@ def auth_register():
     created_user = User.query.filter_by(username=user.username).first()
 
     login_user(created_user)
-    # return redirect(url_for("auth_login"))
+
+    
     return redirect(url_for("index"))
 
 
@@ -78,15 +83,11 @@ def auth_new_friseur():
     form = UserForm(request.form)
 
     if not form.validate():
-        print("Validate error")
-        return render_template("auth/new_friseur.html", form=form)
-
-    if form.password.data != form.passwordConfirmation.data:
-        print("password not same")
         return render_template("auth/new_friseur.html", form=form)
     
     user = User.query.filter_by(username=form.username.data).first()
     if user:
+        flash("Username exists, pick another one", "alert-warning")
         return render_template("auth/new_user.html", form=form)
 
     # Encrypt password and assign friseur role
@@ -105,6 +106,7 @@ def auth_new_friseur():
         db.session().flush()
 
     db.session().commit()
+
     return redirect(url_for("users_index"))
 
 
@@ -137,31 +139,6 @@ def user_single(user_id):
     upcoming = Appointment.how_many_upcoming_appointments_for_user(user_id)[0].get("upcoming")
 
     return render_template("auth/single.html", user=user, appointments=appointments, upcoming=upcoming)
-
-
-# Route to display and handle the page for an admin to change the password of a user
-
-# @app.route("/auth/admin/<user_id>/single/change_password", methods=["GET", "POST"])
-# @login_required(role="ADMIN")
-# def user_change_password(user_id):
-#     user = User.query.get(user_id)
-#     if request.method == "GET":
-#         form = AdminPasswordForm()
-#         return render_template("auth/edit_password.html", form=form, user_id=user_id)
-
-#     form = AdminPasswordForm(request.form)
-
-#     if not form.validate():
-#         return render_template("auth/edit_password.html", form=form, user_id=user_id)
-
-#     if user is None:
-#         return render_template("auth/edit_password.html", form=form, user_id=user_id)
-
-#     user.password = bcrypt.generate_password_hash(form.new_password.data)
-
-#     db.session().commit()
-
-#     return redirect(url_for("users_index"))
 
 
 # Route for an admin to delete a user other than the admin themselves

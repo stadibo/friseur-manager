@@ -46,6 +46,7 @@
       {% endif %}
     </a>
     <a href="{{ url_for('appointments_single_delete', appointment_id=appointment.id) }}" class="btn btn-danger btn-md" role="button">Delete</a>
+    <a href="{{ url_for('appointments_index') }}" class="btn btn-info btn-md" role="button" style="float: right;">Show all</a>
   </div>
 </div>
 {% endblock %}
