@@ -2,7 +2,7 @@ from flask import redirect, render_template, request, url_for
 from application import app, db, login_required, login_manager
 from application.work_days.models import Work_day, Friseur_work_day
 from application.auth.models import User
-from application.work_days.forms import WorkdayForm, MultipleWorkdayForm
+from application.work_days.forms import WorkdayForm
 from datetime import datetime, date
 
 

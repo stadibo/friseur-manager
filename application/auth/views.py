@@ -4,7 +4,7 @@ from flask_login import login_user, logout_user, current_user
 from application import app, db, login_required, login_manager, bcrypt
 from application.auth.models import User, Role
 from application.work_days.models import Work_day, Friseur_work_day
-from application.auth.forms import UserForm, LoginForm, PasswordForm, AdminPasswordForm
+from application.auth.forms import UserForm, LoginForm, PasswordForm
 from application.appointments.models import Appointment
 
 
@@ -141,27 +141,27 @@ def user_single(user_id):
 
 # Route to display and handle the page for an admin to change the password of a user
 
-@app.route("/auth/admin/<user_id>/single/change_password", methods=["GET", "POST"])
-@login_required(role="ADMIN")
-def user_change_password(user_id):
-    user = User.query.get(user_id)
-    if request.method == "GET":
-        form = AdminPasswordForm()
-        return render_template("auth/edit_password.html", form=form, user_id=user_id)
+# @app.route("/auth/admin/<user_id>/single/change_password", methods=["GET", "POST"])
+# @login_required(role="ADMIN")
+# def user_change_password(user_id):
+#     user = User.query.get(user_id)
+#     if request.method == "GET":
+#         form = AdminPasswordForm()
+#         return render_template("auth/edit_password.html", form=form, user_id=user_id)
 
-    form = AdminPasswordForm(request.form)
+#     form = AdminPasswordForm(request.form)
 
-    if not form.validate():
-        return render_template("auth/edit_password.html", form=form, user_id=user_id)
+#     if not form.validate():
+#         return render_template("auth/edit_password.html", form=form, user_id=user_id)
 
-    if user is None:
-        return render_template("auth/edit_password.html", form=form, user_id=user_id)
+#     if user is None:
+#         return render_template("auth/edit_password.html", form=form, user_id=user_id)
 
-    user.password = bcrypt.generate_password_hash(form.new_password.data)
+#     user.password = bcrypt.generate_password_hash(form.new_password.data)
 
-    db.session().commit()
+#     db.session().commit()
 
-    return redirect(url_for("users_index"))
+#     return redirect(url_for("users_index"))
 
 
 # Route for an admin to delete a user other than the admin themselves
