@@ -2,6 +2,7 @@ from flask import redirect, render_template, request, url_for, flash
 from application import app, db, login_required, login_manager
 from application.work_days.models import Work_day, Friseur_work_day
 from application.auth.models import User
+from application.appointments.models import Appointment
 from application.work_days.forms import WorkdayForm
 from datetime import datetime, date
 
@@ -37,6 +38,8 @@ def work_days_index():
     db.session().add(work_day)
     db.session().commit()
 
+    flash("Work day successfully added.", "alert-success")
+
     friseurs = User.query.filter_by(role_id=2)
     added_work_day = Work_day.query.filter_by(date=work_day.date).first()
     for friseur in friseurs:
@@ -51,6 +54,12 @@ def work_days_index():
 @app.route("/workdays/admin/<work_day_id>/info", methods=["GET"])
 @login_required(role="ADMIN")
 def work_days_info(work_day_id):
+    work_day = Work_day.query.get(work_day_id)
+    if work_day:
+        appointments = Appointment.work_day_appointment_data(work_day_id)
+        average = Work_day.average_amount_of_appointments_for_day(work_day_id)
+        return render_template("work_days/single.html", appointments=appointments, average_amount=average, amount=len(appointments))
+    
     return redirect(url_for("work_days_index"))
 
 
@@ -60,8 +69,8 @@ def work_days_info(work_day_id):
 @login_required(role="ADMIN")
 def work_days_delete(work_day_id):
     work_day = Work_day.query.get(work_day_id)
-
-    db.session().delete(work_day)
-    db.session().commit()
-
+    if work_day:
+        flash("Work day successfully deleted")
+        db.session().delete(work_day)
+        db.session().commit()
     return redirect(url_for("work_days_index"))

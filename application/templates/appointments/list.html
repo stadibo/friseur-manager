@@ -25,7 +25,7 @@
   <li class="list-group-item nav-header bg-light">
     <div class="row">
       <div class="col-4">Date / Time</div>
-      <div class="col">Friseur</div>
+      <div class="col">Res.No.</div>
       <div class="col">Fulfilled</div>
       <div class="col"></div>
     </div>
@@ -34,7 +34,7 @@
   <li class="list-group-item">
     <div class="row">
       <div class="col-4">{{ appointment.date + " / " + appointment.time_reserved }}</div>
-      <div class="col">{{ appointment.friseur }}</div>
+      <div class="col">{{ appointment.reservation_number }}</div>
       <div class="col">{{ appointment.fulfilled }}</div>
       <div class="col">
         <form method="GET" action="{{ url_for('appointments_single', appointment_id=appointment.id) }}">

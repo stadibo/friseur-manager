@@ -38,29 +38,4 @@
   </li>
   {% endfor %}
 </ul>
-
-<!-- <table class="table table-sm table-hover" style="width: 50%">
-  <tr>
-    <thead>
-      <th>Date</th>
-      <th></th>
-      <th></th>
-    </thead>
-  </tr>
-  {% for work_day in work_days %}
-  <tr>
-    <td>{{ work_day }}</td>
-    <td>
-      <form method="GET" action="{{ url_for('work_days_info', work_day_id=work_day.id) }}">
-        <input type="submit" value="details" />
-      </form>
-    </td>
-    <td>
-      <form method="POST" action="{{ url_for('work_days_delete', work_day_id=work_day.id) }}">
-        <input type="submit" value="delete" />
-      </form>
-    </td>
-  </tr>
-  {% endfor %}
-</table> -->
 {% endblock %}

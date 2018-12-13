@@ -12,6 +12,7 @@ class Appointment(Base):
     time_reserved = db.Column(db.Time, nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     customer = db.Column(db.String(144), nullable=False)
+    friseur = db.Column(db.String(144), nullable=False)
     reservation_number = db.Column(db.String(8), nullable=False)
     fulfilled = db.Column(db.Boolean, nullable=False)
 
@@ -19,10 +20,11 @@ class Appointment(Base):
 
     work_day_id = db.Column(db.Integer, db.ForeignKey("work_day.id"), nullable=False)
 
-    def __init__(self, time, duration, customer, reservation_number, fulfilled):
+    def __init__(self, time, duration, customer, friseur, reservation_number, fulfilled):
         self.time_reserved = time
         self.duration = duration
         self.customer = customer
+        self.friseur = friseur
         self.reservation_number = reservation_number
         self.fulfilled = fulfilled
     
@@ -43,6 +45,7 @@ class Appointment(Base):
         for user in self.users:
             if user.role.name == "FRISEUR":
                 return user.name
+        return self.friseur
 
     
     @staticmethod
@@ -70,7 +73,7 @@ class Appointment(Base):
 
     @staticmethod
     def full_appointment_data():
-        stmt = text("SELECT DISTINCT appointment.time_reserved, appointment.duration, appointment.customer, appointment.reservation_number, account.name, appointment.fulfilled, appointment.id, work_day.date "
+        stmt = text("SELECT DISTINCT appointment.time_reserved, appointment.duration, appointment.customer, appointment.reservation_number, appointment.friseur, appointment.fulfilled, appointment.id, work_day.date "
                     "FROM appointment "
                     "INNER JOIN work_day "
                     "ON appointment.work_day_id = work_day.id "
@@ -79,7 +82,7 @@ class Appointment(Base):
                     "LEFT JOIN account "
                     "ON account.role_id = 2 "
                     "AND account.id = account_appointment.account_id "
-                    "ORDER BY work_day.date DESC ;")
+                    "ORDER BY work_day.date DESC, appointment.time_reserved ASC ;")
         res = db.engine.execute(stmt)
 
         response = []
@@ -110,7 +113,7 @@ class Appointment(Base):
                     "ON account.id = :user "
                     "WHERE account.role_id = 2 "
                     "AND account_appointment.account_id = :user "
-                    "ORDER BY work_day.date ASC ;").params(user=user_id)
+                    "ORDER BY work_day.date DESC, appointment.time_reserved ASC ;").params(user=user_id)
         res = db.engine.execute(stmt)
 
         response = []
@@ -141,7 +144,7 @@ class Appointment(Base):
                     "ON account.id = :user "
                     "WHERE account.role_id = 1 "
                     "AND account_appointment.account_id = :user "
-                    "ORDER BY work_day.date ASC ;").params(user=user_id)
+                    "ORDER BY work_day.date ASC, appointment.time_reserved ASC ;").params(user=user_id)
         res = db.engine.execute(stmt)
 
         response = []
@@ -162,7 +165,7 @@ class Appointment(Base):
     
     @staticmethod
     def upcoming_appointment_data(user_id):
-        stmt = text("SELECT DISTINCT appointment.time_reserved, appointment.duration, appointment.customer, appointment.reservation_number, account.name, appointment.fulfilled, appointment.id, work_day.date "
+        stmt = text("SELECT DISTINCT appointment.time_reserved, appointment.duration, appointment.customer, appointment.reservation_number, appointment.friseur, appointment.fulfilled, appointment.id, work_day.date "
                     "FROM appointment "
                     "INNER JOIN work_day "
                     "ON appointment.work_day_id = work_day.id "
@@ -172,7 +175,32 @@ class Appointment(Base):
                     "ON account_appointment.account_id = :user "
                     "WHERE account.id = :user "
                     "AND CURRENT_TIMESTAMP < work_day.date OR CURRENT_TIME < appointment.time_reserved "
-                    "ORDER BY work_day.date ASC ;").params(user=user_id)
+                    "ORDER BY work_day.date ASC, appointment.time_reserved ASC ;").params(user=user_id)
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            # Check type of object because of difference in returned object between development db and production db
+            if isinstance(row[0], datetime.time):
+                time = row[0].strftime("%H:%M")
+            else:
+                time = row[0][0:5]
+            if isinstance(row[7], datetime.datetime):
+                date = row[7].strftime("%Y-%m-%d")
+            else:
+                date = row[7][0:10]
+            
+            response.append({"time_reserved": time, "duration": row[1], "customer": row[2], "reservation_number": row[3], "friseur": row[4], "fulfilled": row[5], "id": row[6], "date": date})
+        
+        return response
+
+    @staticmethod
+    def work_day_appointment_data(work_day_id):
+        stmt = text("SELECT appointment.time_reserved, appointment.duration, appointment.customer, appointment.reservation_number, appointment.friseur, appointment.fulfilled, appointment.id, work_day.date "
+                    "FROM appointment, work_day "
+                    "WHERE appointment.work_day_id = :id "
+                    "AND appointment.work_day_id = work_day.id "
+                    "ORDER BY appointment.time_reserved ASC ;").params(id=work_day_id)
         res = db.engine.execute(stmt)
 
         response = []
@@ -237,3 +265,5 @@ class Appointment(Base):
             response.append({"fulfilled": row[0]})
         
         return response
+
+    

@@ -60,9 +60,10 @@ def appointments_reserve_form(user_id, work_day_id, time):
         time_as_int = int(time[0:2])
         time_formatted = datetime.time(time_as_int, 0)
 
-        appointment = Appointment(time_formatted, 1, current_user.name, res_nr, False)
-      
         friseur = User.query.get(user_id)
+
+        appointment = Appointment(time_formatted, 1, current_user.name, friseur.name, res_nr, False)
+        
         appointment.users.append(current_user)
         appointment.users.append(friseur)
         appointment.work_day_id = work_day_id
@@ -83,9 +84,10 @@ def appointments_reserve_form(user_id, work_day_id, time):
     time_as_int = int(time[0:2])
     time_formatted = datetime.time(time_as_int, 0)
 
-    appointment = Appointment(time_formatted, 1, form.customer.data, res_nr, False)
-
     friseur = User.query.get(user_id)
+
+    appointment = Appointment(time_formatted, 1, form.customer.data, friseur.name, res_nr, False)
+    
     appointment.users.append(friseur)
     appointment.work_day_id = work_day_id
       

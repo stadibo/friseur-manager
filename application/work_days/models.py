@@ -34,6 +34,28 @@ class Work_day(Base):
             response.append({"id": row[0], "date": date})
         
         return response
+    
+    @staticmethod
+    def average_amount_of_appointments_for_day(work_day_id):
+        stmt = text("SELECT AVG(appointments) "
+                    "FROM ("
+                        "SELECT COUNT(appointment.id) AS appointments, account.id "
+                        "FROM account "
+                        "LEFT JOIN account_appointment "
+                        "ON account.id = account_appointment.account_id "
+                        "LEFT JOIN appointment "
+                        "ON account_appointment.appointment_id = appointment.id "
+                        "AND appointment.work_day_id = :id "
+                        "WHERE account.role_id = 2 "
+                        "GROUP BY account.id"
+                    ");").params(id=work_day_id)
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"average_amount": row[0]})
+        
+        return response[0].get("average_amount")
 
 class Friseur_work_day(db.Model):
     user_id = db.Column("account_id", db.Integer, db.ForeignKey("account.id"), primary_key=True)
