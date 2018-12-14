@@ -89,7 +89,7 @@ def auth_new_friseur():
     user = User.query.filter_by(username=form.username.data).first()
     if user:
         flash("Username exists, pick another one", "alert-warning")
-        return render_template("auth/new_user.html", form=form)
+        return render_template("auth/new_friseur.html", form=form)
 
     # Encrypt password and assign friseur role
     password_hash = bcrypt.generate_password_hash(form.password.data)
@@ -119,8 +119,8 @@ def auth_new_friseur():
 def users_index():
     # Make pagination
     page, per_page, offset = get_page_args()
-    users_total = User.query.count()
-    users_paginated = User.query.order_by("role_id").paginate(page, per_page, error_out=False)
+    users_total = User.query.filter_by(role_id=1).count()
+    users_paginated = User.query.filter_by(role_id=1).paginate(page, per_page, error_out=False)
     pagination = Pagination(page=page, per_page=per_page, total=users_total,
                             css_framework="bootstrap4", record_name="users")
 
