@@ -1,4 +1,6 @@
 from flask import redirect, render_template, request, url_for, flash
+from flask_paginate import Pagination, get_page_args
+
 from application import app, db, login_required, login_manager
 from application.work_days.models import Work_day, Friseur_work_day
 from application.auth.models import User
@@ -18,35 +20,46 @@ def work_days_index():
         work_days_with_amount.append({"work_day": work_day, "amount": len(work_day.appointments)})
 
     if request.method == "GET":
-        return render_template("work_days/list.html", form=WorkdayForm(), work_days=work_days_with_amount)
+        # Make pagination
+        page, per_page, offset = get_page_args()
+        work_days_total = len(work_days_with_amount)
+        work_days_paginated = work_days_for_page(work_days_with_amount, offset=offset, per_page=per_page)
+        pagination = Pagination(page=page, per_page=per_page, total=work_days_total,
+                                css_framework="bootstrap4", record_name="work days")
 
-    form = WorkdayForm(request.form)
+        return render_template("work_days/list.html", form=WorkdayForm(), work_days=work_days_paginated, page=page, per_page=per_page, pagination=pagination)
+    else:
+        form = WorkdayForm(request.form)
 
-    if not form.validate():
-        return render_template("work_days/list.html", form=form, work_days=work_days_with_amount)
+        if not form.validate():
+            return render_template("work_days/list.html", form=form, work_days=work_days_with_amount)
 
-    current_date = datetime.now()
-    new_date = datetime.combine(form.date.data, datetime.min.time())
+        current_date = datetime.now()
+        new_date = datetime.combine(form.date.data, datetime.min.time())
 
-    work_day = Work_day.query.filter_by(date=new_date).first()
+        work_day = Work_day.query.filter_by(date=new_date).first()
 
-    if current_date > new_date or work_day:
-        flash("Work day already passed. Add on that is in the future.", "alert-warning")
-        return render_template("work_days/list.html", form=form, work_days=work_days_with_amount)
+        if current_date > new_date or work_day:
+            flash("Work day already passed. Add on that is in the future.", "alert-warning")
+            return render_template("work_days/list.html", form=form, work_days=work_days_with_amount)
 
-    work_day = Work_day(new_date)
-    db.session().add(work_day)
-    db.session().commit()
-
-    flash("Work day successfully added.", "alert-success")
-
-    friseurs = User.query.filter_by(role_id=2)
-    added_work_day = Work_day.query.filter_by(date=work_day.date).first()
-    for friseur in friseurs:
-        db.session().add(Friseur_work_day(friseur.id, added_work_day.id, 10, 17))
+        work_day = Work_day(new_date)
+        db.session().add(work_day)
         db.session().commit()
 
+        flash("Work day successfully added.", "alert-success")
+
+        friseurs = User.query.filter_by(role_id=2)
+        added_work_day = Work_day.query.filter_by(date=work_day.date).first()
+        for friseur in friseurs:
+            db.session().add(Friseur_work_day(friseur.id, added_work_day.id, 10, 17))
+            db.session().commit()
+
     return redirect(url_for("work_days_index"))
+
+# Get users limited by the page the user is currently on
+def work_days_for_page(work_days, offset=0, per_page=10):
+  return work_days[offset: offset + per_page]
 
 
 # Route for showing more information about day, like friseurs working and appointments

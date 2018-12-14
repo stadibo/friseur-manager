@@ -1,5 +1,6 @@
 from flask import redirect, render_template, request, url_for, flash
 from flask_login import login_user, logout_user, current_user
+from flask_paginate import Pagination, get_page_args
 
 from application import app, db, login_required, login_manager, bcrypt
 from application.auth.models import User, Role
@@ -107,7 +108,7 @@ def auth_new_friseur():
 
     db.session().commit()
 
-    return redirect(url_for("users_index"))
+    return redirect(url_for("friseur_index"))
 
 
 # Route to display the page for listing all existing users
@@ -115,13 +116,35 @@ def auth_new_friseur():
 @app.route("/auth/admin/all", methods=["GET"])
 @login_required(role="ADMIN")
 def users_index():
-    return render_template("auth/list.html", users=User.query.order_by("role_id").all())
+    users = User.query.order_by("role_id").all()
+
+    # Make pagination
+    page, per_page, offset = get_page_args()
+    users_total = len(users)
+    users_paginated = users_for_page(users, offset=offset, per_page=per_page)
+    pagination = Pagination(page=page, per_page=per_page, total=users_total,
+                            css_framework="bootstrap4", record_name="users")
+
+    return render_template("auth/list.html", users=users_paginated, page=page, per_page=per_page, pagination=pagination)
+
+# Get users limited by the page the user is currently on
+def users_for_page(users, offset=0, per_page=10):
+  return users[offset: offset + per_page]
 
 
 @app.route("/auth/admin/friseurs", methods=["GET"])
 @login_required(role="ADMIN")
 def friseur_index():
-    return render_template("auth/friseurs.html", friseurs=User.query.filter_by(role_id=2).all())
+    friseurs = User.query.filter_by(role_id=2).all()
+    
+    # Make pagination
+    page, per_page, offset = get_page_args()
+    users_total = len(friseurs)
+    users_paginated = users_for_page(friseurs, offset=offset, per_page=per_page)
+    pagination = Pagination(page=page, per_page=per_page, total=users_total,
+                            css_framework="bootstrap4", record_name="users")
+
+    return render_template("auth/friseurs.html", friseurs=users_paginated, page=page, per_page=per_page, pagination=pagination)
 
 
 # Route to display the page for showing information about a single user
