@@ -19,20 +19,20 @@ def work_days_index():
     for work_day in work_days:
         work_days_with_amount.append({"work_day": work_day, "amount": len(work_day.appointments)})
 
-    if request.method == "GET":
-        # Make pagination
-        page, per_page, offset = get_page_args()
-        work_days_total = len(work_days_with_amount)
-        work_days_paginated = work_days_for_page(work_days_with_amount, offset=offset, per_page=per_page)
-        pagination = Pagination(page=page, per_page=per_page, total=work_days_total,
-                                css_framework="bootstrap4", record_name="work days")
+    # Make pagination
+    page, per_page, offset = get_page_args()
+    work_days_total = len(work_days_with_amount)
+    work_days_paginated = work_days_for_page(work_days_with_amount, offset=offset, per_page=per_page)
+    pagination = Pagination(page=page, per_page=per_page, total=work_days_total, css_framework="bootstrap4", record_name="work days")
 
+    if request.method == "GET":
         return render_template("work_days/list.html", form=WorkdayForm(), work_days=work_days_paginated, page=page, per_page=per_page, pagination=pagination)
     else:
         form = WorkdayForm(request.form)
 
         if not form.validate():
-            return render_template("work_days/list.html", form=form, work_days=work_days_with_amount)
+            flash("Not a valid date", "alert-warning")
+            return render_template("work_days/list.html", form=WorkdayForm(), work_days=work_days_paginated, page=page, per_page=per_page, pagination=pagination)
 
         current_date = datetime.now()
         new_date = datetime.combine(form.date.data, datetime.min.time())
@@ -41,7 +41,7 @@ def work_days_index():
 
         if current_date > new_date or work_day:
             flash("Work day already passed. Add on that is in the future.", "alert-warning")
-            return render_template("work_days/list.html", form=form, work_days=work_days_with_amount)
+            return render_template("work_days/list.html", form=form, work_days=work_days_paginated, page=page, per_page=per_page, pagination=pagination)
 
         work_day = Work_day(new_date)
         db.session().add(work_day)
