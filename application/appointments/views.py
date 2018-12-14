@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, url_for, flash
 from flask_login import current_user
 from application import app, db, login_required, login_manager
 from application.appointments.models import Appointment
@@ -49,53 +49,82 @@ def appointments_select_time(user_id, work_day_id):
 def appointments_reserve_form(user_id, work_day_id, time):
     # Add the appointment based on the logged in user or display the form if not customer("USER")
     if request.method == "GET":
-      role = "ANY"
-      try:
-        role = current_user.role.name
-      except AttributeError:
-        pass
+      # Check if a customer is logged in and create an appointment
+      reservation_number = logged_in_user_reserves(user_id, work_day_id, time)
+      if reservation_number:
+        # New appointment created for user
+        return render_template("appointments/appointment_created.html", reservation_number=reservation_number)
+      else:
+        # Show the reservation form for non logged in customers
+        return render_template("appointments/appointment_new.html", form=AppointmentForm(), user_id=user_id, work_day_id=work_day_id, time=time)
+    else:
+      # Get information for non logged in customer and add their appointment
+      form = AppointmentForm(request.form)
+
+      if not form.validate():
+        return render_template("appointments/appointment_new.html", form=form, user_id=user_id, work_day_id=work_day_id, time=time)
       
-      if role == "USER":
-        res_nr = "{:08}".format(random.randrange(0, 10**8))
-        time_as_int = int(time[0:2])
-        time_formatted = datetime.time(time_as_int, 0)
-
-        friseur = User.query.get(user_id)
-
-        appointment = Appointment(time_formatted, 1, current_user.name, friseur.name, res_nr, False)
+      # Create information necessary to identify appointment
+      reservation_number = generate_unique_reservation_number()
+      time_formatted = format_time_for_appointment(time)
+      friseur = User.query.get(user_id)
+      appointment = Appointment(time_formatted, 1, form.customer.data, friseur.name, reservation_number, False)
+      
+      appointment.users.append(friseur)
+      appointment.work_day_id = work_day_id
         
-        appointment.users.append(current_user)
-        appointment.users.append(friseur)
-        appointment.work_day_id = work_day_id
+      db.session().add(appointment)
+      db.session().commit()
+      return render_template("appointments/appointment_created.html", reservation_number=reservation_number)
+
+
+def logged_in_user_reserves(user_id, work_day_id, time):
+  # Check if a user is logged in and what role they have
+  role = "ANY"
+  try:
+    role = current_user.role.name
+  except AttributeError:
+    pass
       
-        db.session().add(appointment)
-        db.session().commit()
-        return render_template("appointments/appointment_created.html", reservation_number=res_nr)
-
-      return render_template("appointments/appointment_new.html", form=AppointmentForm(), user_id=user_id, work_day_id=work_day_id, time=time)
-    
-    # Get information for non logged in customer and add their appointment
-    form = AppointmentForm(request.form)
-
-    if not form.validate():
-      return render_template("appointments/appointment_new.html", form=form, user_id=user_id, work_day_id=work_day_id, time=time)
-    
-    res_nr = "{:08}".format(random.randrange(0, 10**8))
-    time_as_int = int(time[0:2])
-    time_formatted = datetime.time(time_as_int, 0)
-
+  if role == "USER":
+    # Create information necessary to identify appointment
+    reservation_number = generate_unique_reservation_number()
+    time_formatted = format_time_for_appointment(time)
     friseur = User.query.get(user_id)
-
-    appointment = Appointment(time_formatted, 1, form.customer.data, friseur.name, res_nr, False)
-    
+    appointment = Appointment(time_formatted, 1, current_user.name, friseur.name, reservation_number, False)
+        
+    appointment.users.append(current_user)
     appointment.users.append(friseur)
     appointment.work_day_id = work_day_id
       
     db.session().add(appointment)
     db.session().commit()
-    return render_template("appointments/appointment_created.html", reservation_number=res_nr)
+    return reservation_number
+    # return render_template("appointments/appointment_created.html", reservation_number=res_nr)
+  return None
 
 
+def generate_unique_reservation_number():
+  notUnique = True
+  while notUnique:
+    reservation_number = generate_reservation_number()
+    notUnique = Appointment.query.filter_by(reservation_number=reservation_number).first()
+  return reservation_number
+
+
+def generate_reservation_number():
+  number = "{:08}".format(random.randrange(0, 10**8))
+  return number
+
+
+# Time from the selection form comes in the form of a string and is converted to datetime.time
+def format_time_for_appointment(time):
+  time_as_int = int(time[0:2])
+  time_formatted = datetime.time(time_as_int, 0)
+  return time_formatted
+
+  
+# Show the full information about an appointment
 @app.route("/appointments/admin/<appointment_id>/single", methods=["GET"])
 @login_required(role="ADMIN")
 def appointments_single(appointment_id):
@@ -105,7 +134,8 @@ def appointments_single(appointment_id):
       return render_template("appointments/single.html", appointment=appointment, date=date)
     return redirect(url_for("appointments_index"))
 
-    
+
+# Change the state of an appointment from not fulfilled to fullfilled - or vice versa
 @app.route("/appointments/admin/<appointment_id>/single/change_status", methods=["GET"])
 @login_required(role="ADMIN")
 def appointments_single_complete(appointment_id):
@@ -113,8 +143,8 @@ def appointments_single_complete(appointment_id):
     if appointment:
       appointment.fulfilled = not appointment.fulfilled
       db.session().commit()
-
       return redirect(url_for("appointments_single", appointment_id=appointment_id))
+
     return redirect(url_for("appointments_index"))
 
 @app.route("/appointments/admin/<appointment_id>/single/delete", methods=["GET"])
@@ -124,4 +154,5 @@ def appointments_single_delete(appointment_id):
     if appointment:
       db.session().delete(appointment)
       db.session().commit()
+      flash("Appointment %s successfully removed." % appointment.reservation_number)
     return redirect(url_for("appointments_index"))
