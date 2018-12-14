@@ -30,9 +30,9 @@ def work_days_index():
 
     work_day = Work_day.query.filter_by(date=new_date).first()
 
-    # if current_date > new_date or work_day:
-    #     flash("Work day already passed. Add on that is in the future.", "alert-warning")
-    #     return render_template("work_days/list.html", form=form, work_days=work_days_with_amount)
+    if current_date > new_date or work_day:
+        flash("Work day already passed. Add on that is in the future.", "alert-warning")
+        return render_template("work_days/list.html", form=form, work_days=work_days_with_amount)
 
     work_day = Work_day(new_date)
     db.session().add(work_day)
