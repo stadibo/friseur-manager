@@ -82,7 +82,9 @@ class Friseur_work_day(db.Model):
                     "LEFT JOIN work_day "
                     "ON friseur_work_day.work_day_id = work_day.id "
                     "WHERE friseur_work_day.account_id = :user "
-                    # "AND CURRENT_TIMESTAMP < work_day.date "
+                    "ORDER BY work_day.date ASC;").params(user=user_id)
+        res = db.engine.execute(stmt)
+# "AND CURRENT_TIMESTAMP < work_day.date "
                     # "AND ("
                     #     "SELECT COUNT(*) "
                     #     "FROM account_appointment, appointment "
@@ -90,9 +92,6 @@ class Friseur_work_day(db.Model):
                     #     "AND account_appointment.appointment_id = appointment.id "
                     #     "AND appointment.work_day_id = friseur_work_day.work_day_id"
                     # ") < 8 "
-                    "ORDER BY work_day.date ASC;").params(user=user_id)
-        res = db.engine.execute(stmt)
-
         response = []
         for row in res:
             # Cheack type of object because of difference in returned object between development db and production db
