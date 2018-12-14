@@ -64,3 +64,4 @@ Services are presented on a website and it is possible to make reservations from
 - The routes leading to appointment data should also be able to traverse back the same direction, and not only lead to all appointments
 - The handling of dates could probably be made more simple, instead of manually checking and modifying the date value if needed
 - Make the authorization check take more than one role for making routes more reusable for users with different roles
+- Add search and filtering by various criteria
