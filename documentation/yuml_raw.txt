@@ -1,6 +1,6 @@
 [account | (pk) id : integer; (fk) role_id : integer; date_created : datetime; date_modified : datetime; name : string; username : string; password : binary;], , 
 
-[appointment | (pk) id : integer; (fk) work_day_id : integer; date_created : datetime; date_modified : datetime; time_reserved : time; duration : integer; customer : string; reservation_number : string; fulfilled : boolean], 
+[appointment | (pk) id : integer; (fk) work_day_id : integer; date_created : datetime; date_modified : datetime; time_reserved : time; duration : integer; customer : string; friseur : string; reservation_number : string; fulfilled : boolean], 
 
 [work_day | (pk) id : integer; date_created : datetime; date_modified : datetime; date : datetime;],
 

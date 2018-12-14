@@ -108,6 +108,7 @@ def auth_new_friseur():
 
     db.session().commit()
 
+    flash("New friseur with username %s created." % user.username, "alert-warning")
     return redirect(url_for("friseur_index"))
 
 
