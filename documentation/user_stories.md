@@ -13,7 +13,10 @@
 
 all appointments and data related to it paginated (offset and count added as parameters)
 ```sql
-SELECT DISTINCT appointment.time_reserved, appointment.duration, appointment.customer, appointment.reservation_number, appointment.friseur, appointment.fulfilled, appointment.id, work_day.date 
+SELECT DISTINCT appointment.time_reserved, appointment.duration, 
+                appointment.customer, appointment.reservation_number, 
+                appointment.friseur, appointment.fulfilled, 
+                appointment.id, work_day.date 
 FROM appointment
 INNER JOIN work_day 
 ON appointment.work_day_id = work_day.id 
@@ -28,7 +31,8 @@ LIMIT offset, count;
 
 add new friseur (role_id = 2 for friseur)
 ```sql
-INSERT INTO account (name, username, password, role_id) VALUES ('name', 'username', passwordHash, role_id);
+INSERT INTO account (name, username, password, role_id) 
+VALUES ('name', 'username', passwordHash, role_id);
 ```
 
 create work day 
@@ -105,7 +109,8 @@ WHERE CURRENT_TIMESTAMP < work_day.date;
 
 create appointment
 ```sql
-INSERT INTO appointment (time_reserved, duration, customer, friseur, reservation_number, fulfilled, work_day_id) VALUES ('time', 1, 'customer name', 'friseur name', '12345678', work_day_id);
+INSERT INTO appointment (time_reserved, duration, customer, friseur, reservation_number, fulfilled, work_day_id) 
+VALUES ('time', 1, 'customer name', 'friseur name', '12345678', work_day_id);
 ```
 
 delete appointment
@@ -133,7 +138,10 @@ UPDATE account SET passwordHash = newPasswordHash WHERE account.id = id;
 
 view my appointments (id for friseur added as a parameter)
 ```sql
-SELECT DISTINCT appointment.time_reserved, appointment.duration, appointment.customer, appointment.reservation_number, account.name, appointment.fulfilled, appointment.id, work_day.date 
+SELECT DISTINCT appointment.time_reserved, appointment.duration, 
+                appointment.customer, appointment.reservation_number, 
+                account.name, appointment.fulfilled, 
+                appointment.id, work_day.date 
 FROM appointment 
 INNER JOIN work_day 
 ON appointment.work_day_id = work_day.id 
