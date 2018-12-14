@@ -14,13 +14,15 @@ import random
 @app.route("/appointments/admin/all", methods=["GET"])
 @login_required(role="ADMIN")
 def appointments_index():
-    appointments = Appointment.full_appointment_data()
+    # Make pagination
+    page, per_page, offset = get_page_args()
+
+    # Statistics
     upcoming = Appointment.how_many_upcoming_appointments()[0].get("upcoming")
     fulfilled = Appointment.how_many_appointments_fulfilled()[0].get("fulfilled")
+    appointments_total = Appointment.how_many_appointments()
 
-    page, per_page, offset = get_page_args()
-    appointments_total = len(appointments)
-    appointments_paginated = appointments_for_page(appointments, offset=offset, per_page=per_page)
+    appointments_paginated = Appointment.full_appointment_data_paginate(offset=offset, count=per_page)
     pagination = Pagination(page=page, per_page=per_page, total=appointments_total,
                             css_framework="bootstrap4", record_name="appointments")
 
@@ -32,8 +34,8 @@ def appointments_index():
                            pagination=pagination)
 
 # Get appointments limited by the page the user is currently on
-def appointments_for_page(appointments, offset=0, per_page=10):
-  return appointments[offset: offset + per_page]
+# def appointments_for_page(appointments, offset=0, per_page=10):
+#   return appointments[offset: offset + per_page]
 
 
 @app.route("/appointments/reserve/select_friseur", methods=["GET"])

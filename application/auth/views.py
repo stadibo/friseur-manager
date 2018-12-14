@@ -117,31 +117,27 @@ def auth_new_friseur():
 @app.route("/auth/admin/all", methods=["GET"])
 @login_required(role="ADMIN")
 def users_index():
-    users = User.query.order_by("role_id").all()
-
     # Make pagination
     page, per_page, offset = get_page_args()
-    users_total = len(users)
-    users_paginated = users_for_page(users, offset=offset, per_page=per_page)
+    users_total = User.query.count()
+    users_paginated = User.query.order_by("role_id").paginate(page, per_page, error_out=False)
     pagination = Pagination(page=page, per_page=per_page, total=users_total,
                             css_framework="bootstrap4", record_name="users")
 
     return render_template("auth/list.html", users=users_paginated, page=page, per_page=per_page, pagination=pagination)
 
 # Get users limited by the page the user is currently on
-def users_for_page(users, offset=0, per_page=10):
-  return users[offset: offset + per_page]
+# def users_for_page(users, offset=0, per_page=10):
+#   return users[offset: offset + per_page]
 
 
 @app.route("/auth/admin/friseurs", methods=["GET"])
 @login_required(role="ADMIN")
 def friseur_index():
-    friseurs = User.query.filter_by(role_id=2).all()
-    
     # Make pagination
     page, per_page, offset = get_page_args()
-    users_total = len(friseurs)
-    users_paginated = users_for_page(friseurs, offset=offset, per_page=per_page)
+    users_total = User.query.filter_by(role_id=2).count()
+    users_paginated = User.query.filter_by(role_id=2).paginate(page, per_page, error_out=False)
     pagination = Pagination(page=page, per_page=per_page, total=users_total,
                             css_framework="bootstrap4", record_name="users")
 
