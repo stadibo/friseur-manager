@@ -21,7 +21,9 @@
     </li>
   </ul>
   <div class="card-body">
+    {% if user.role.name != "ADMIN" %}
     <a href="{{ url_for('user_delete', user_id=user.id) }}" class="btn btn-danger btn-md" role="button">Delete</a>
+    {% endif %}
   </div>
 </div>
 {% if user.role.name == "FRISEUR" or user.role.name == "USER" %}
@@ -54,7 +56,7 @@
         <div class="col">{{ appointment.fulfilled }}</div>
         <div class="col">
           <form method="GET" action="{{ url_for('appointments_single', appointment_id=appointment.id) }}">
-            <input type="submit" class="btn btn-info btn-md" value="Info" />
+            <input type="submit" class="btn btn-info btn-md" value="View" />
           </form>
         </div>
       </div>

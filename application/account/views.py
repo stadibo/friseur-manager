@@ -14,7 +14,6 @@ from application.appointments.models import Appointment
 @login_required()
 def account_page():
     user = User.query.get(current_user.id)
-    appointments = []
     if user:
       if user.role.name == "FRISEUR":
           appointments = Appointment.friseur_full_appointment_data(user.id)

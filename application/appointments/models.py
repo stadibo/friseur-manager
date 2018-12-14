@@ -309,7 +309,7 @@ class Appointment(Base):
     def how_many_appointments_fulfilled():
         stmt = text("SELECT COUNT(DISTINCT appointment.id) "
                     "FROM appointment "
-                    "WHERE appointment.fulfilled IS true;")
+                    "WHERE appointment.fulfilled;")
         res = db.engine.execute(stmt)
 
         response = []
