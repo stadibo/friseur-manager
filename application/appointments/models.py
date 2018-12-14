@@ -262,7 +262,7 @@ class Appointment(Base):
 
     @staticmethod
     def how_many_upcoming_appointments_for_user(user_id):
-        stmt = text("SELECT COUNT(appointment.id) "
+        stmt = text("SELECT COUNT(DISTINCT appointment.id) "
                     "FROM appointment "
                     "INNER JOIN account_appointment "
                     "ON appointment.id = account_appointment.appointment_id "
