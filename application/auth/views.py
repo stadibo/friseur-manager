@@ -126,10 +126,6 @@ def users_index():
 
     return render_template("auth/list.html", users=users_paginated, page=page, per_page=per_page, pagination=pagination)
 
-# Get users limited by the page the user is currently on
-# def users_for_page(users, offset=0, per_page=10):
-#   return users[offset: offset + per_page]
-
 
 @app.route("/auth/admin/friseurs", methods=["GET"])
 @login_required(role="ADMIN")

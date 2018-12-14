@@ -26,16 +26,13 @@ def appointments_index():
     pagination = Pagination(page=page, per_page=per_page, total=appointments_total,
                             css_framework="bootstrap4", record_name="appointments")
 
-    return render_template("appointments/list.html", appointments=appointments_paginated,
+    return render_template("appointments/list.html",
+                           appointments=appointments_paginated,
                            upcoming=upcoming,
                            fulfilled=fulfilled,
                            page=page,
                            per_page=per_page,
                            pagination=pagination)
-
-# Get appointments limited by the page the user is currently on
-# def appointments_for_page(appointments, offset=0, per_page=10):
-#   return appointments[offset: offset + per_page]
 
 
 @app.route("/appointments/reserve/select_friseur", methods=["GET"])
@@ -51,11 +48,11 @@ def appointments_select_date(user_id):
 
 @app.route("/appointments/reserve/<user_id>/<work_day_id>", methods=["GET"])
 def appointments_select_time(user_id, work_day_id):
-    appointments = Appointment.account_appointment_for_day(user_id, work_day_id)
+    appointments = Appointment.account_appointment_for_day(
+        user_id, work_day_id)
 
     # Filter timeslots so that only non occupied appointment time possibilities are shown
-    friseur_times = list(map(lambda a: datetime.time(
-        int(a.get("time_reserved")[0:2])), appointments))
+    friseur_times = list(map(lambda a: datetime.time(int(a.get("time_reserved")[0:2])), appointments))
     available_times = []
 
     # Display only open timeslots
@@ -90,8 +87,7 @@ def appointments_reserve_form(user_id, work_day_id, time):
         reservation_number = generate_unique_reservation_number()
         time_formatted = format_time_for_appointment(time)
         friseur = User.query.get(user_id)
-        appointment = Appointment(
-            time_formatted, 1, form.customer.data, friseur.name, reservation_number, False)
+        appointment = Appointment(time_formatted, 1, form.customer.data, friseur.name, reservation_number, False)
 
         appointment.users.append(friseur)
         appointment.work_day_id = work_day_id
@@ -114,8 +110,7 @@ def logged_in_user_reserves(user_id, work_day_id, time):
         reservation_number = generate_unique_reservation_number()
         time_formatted = format_time_for_appointment(time)
         friseur = User.query.get(user_id)
-        appointment = Appointment(
-            time_formatted, 1, current_user.name, friseur.name, reservation_number, False)
+        appointment = Appointment(time_formatted, 1, current_user.name, friseur.name, reservation_number, False)
 
         appointment.users.append(current_user)
         appointment.users.append(friseur)
@@ -180,5 +175,6 @@ def appointments_single_delete(appointment_id):
     if appointment:
         db.session().delete(appointment)
         db.session().commit()
-        flash("Appointment %s successfully removed." % appointment.reservation_number)
+        flash("Appointment %s successfully removed." %
+              appointment.reservation_number)
     return redirect(url_for("appointments_index"))

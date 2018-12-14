@@ -40,8 +40,12 @@ def work_days_index():
 
         work_day = Work_day.query.filter_by(date=new_date).first()
 
-        if current_date > new_date or work_day:
-            flash("Work day already passed. Add on that is in the future.", "alert-warning")
+        if current_date > new_date:
+            flash("Work day already passed. Add one that is in the future.", "alert-warning")
+            return render_template("work_days/list.html", form=form, work_days=work_days_with_amount, page=page, per_page=per_page, pagination=pagination)
+
+        if work_day:
+            flash("Work day already exists.", "alert-warning")
             return render_template("work_days/list.html", form=form, work_days=work_days_with_amount, page=page, per_page=per_page, pagination=pagination)
 
         work_day = Work_day(new_date)
@@ -57,10 +61,6 @@ def work_days_index():
             db.session().commit()
 
     return redirect(url_for("work_days_index"))
-
-# Get users limited by the page the user is currently on
-# def work_days_for_page(work_days, offset=0, per_page=10):
-#   return work_days[offset: offset + per_page]
 
 
 # Route for showing more information about day, like friseurs working and appointments
