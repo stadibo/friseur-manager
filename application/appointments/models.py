@@ -2,6 +2,7 @@ from application import db
 from application.models import Base
 from sqlalchemy.sql import text
 import datetime
+import os
 
 users = db.Table("account_appointment",
     db.Column("account_id", db.Integer, db.ForeignKey("account.id"), primary_key=True),
@@ -103,6 +104,12 @@ class Appointment(Base):
 
     @staticmethod
     def full_appointment_data_paginate(offset=0, count=5):
+        def get_correct_limit_syntax():
+            if os.environ.get("HEROKU"):
+                return "OFFSET :offset LIMIT :count"
+            else:
+                return "LIMIT :offset, :count"
+
         stmt = text("SELECT DISTINCT appointment.time_reserved, appointment.duration, appointment.customer, appointment.reservation_number, appointment.friseur, appointment.fulfilled, appointment.id, work_day.date "
                     "FROM appointment "
                     "INNER JOIN work_day "
@@ -113,7 +120,8 @@ class Appointment(Base):
                     "ON account.role_id = 2 "
                     "AND account.id = account_appointment.account_id "
                     "ORDER BY work_day.date DESC, appointment.time_reserved ASC "
-                    "LIMIT :offset, :count ;").params(offset=offset, count=count)
+                    + get_correct_limit_syntax() +
+                    ";").params(offset=offset, count=count)
         res = db.engine.execute(stmt)
 
         response = []
