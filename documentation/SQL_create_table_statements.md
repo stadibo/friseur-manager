@@ -1,6 +1,6 @@
 # SQL create table statements
 
-````
+```sql
 CREATE TABLE role (
         id INTEGER NOT NULL,
         name VARCHAR(8) NOT NULL,
@@ -57,4 +57,4 @@ CREATE TABLE account_appointment (
         FOREIGN KEY(account_id) REFERENCES account (id),
         FOREIGN KEY(appointment_id) REFERENCES appointment (id)
 );
-````
+```
