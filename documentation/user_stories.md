@@ -18,7 +18,7 @@
 - choose who will cut my hair so that I am comfortable with their decisions. (COMPLETE)
 - sign up for loyalty account so that I get a discount for supporting the business in question. (COMPLETE)
 - update the information of my account. (COMPLETE)
-- delete my account when I no longer want my information used by this business. (WORK IN PROGRESS: Not yet GDPR compliant, send email to management to delete account)
+- delete my account when I no longer want my information used by this business. (WORK IN PROGRESS: Not yet GDPR compliant, send email to management or call salon to delete account)
 
 ### As a friseur I want to be able to:
 - change my working hours so that I can adjust for changes in life. (TODO)

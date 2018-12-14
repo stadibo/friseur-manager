@@ -33,6 +33,7 @@ CREATE TABLE appointment (
         time_reserved TIME NOT NULL,
         duration INTEGER NOT NULL,
         customer VARCHAR(144) NOT NULL,
+        friseur VARCHAR(144) NOT NULL,
         reservation_number VARCHAR(8) NOT NULL,
         fulfilled BOOLEAN NOT NULL,
         work_day_id INTEGER NOT NULL,
