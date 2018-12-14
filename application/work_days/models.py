@@ -82,14 +82,14 @@ class Friseur_work_day(db.Model):
                     "LEFT JOIN work_day "
                     "ON friseur_work_day.work_day_id = work_day.id "
                     "WHERE friseur_work_day.account_id = :user "
-                    "AND CURRENT_TIMESTAMP < work_day.date "
-                    "AND ("
-                        "SELECT COUNT(*) "
-                        "FROM account_appointment, appointment "
-                        "WHERE account_appointment.account_id = :user "
-                        "AND account_appointment.appointment_id = appointment.id "
-                        "AND appointment.work_day_id = friseur_work_day.work_day_id"
-                    ") < 8 "
+                    # "AND CURRENT_TIMESTAMP < work_day.date "
+                    # "AND ("
+                    #     "SELECT COUNT(*) "
+                    #     "FROM account_appointment, appointment "
+                    #     "WHERE account_appointment.account_id = :user "
+                    #     "AND account_appointment.appointment_id = appointment.id "
+                    #     "AND appointment.work_day_id = friseur_work_day.work_day_id"
+                    # ") < 8 "
                     "ORDER BY work_day.date ASC;").params(user=user_id)
         res = db.engine.execute(stmt)
 
