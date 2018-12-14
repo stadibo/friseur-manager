@@ -234,6 +234,32 @@ class Appointment(Base):
         
         return response
 
+    # @staticmethod
+    # def how_many_upcoming_appointments_test():
+    #     stmt = text("SELECT COUNT(*) "
+    #                 "FROM ("
+    #                 "SELECT appointment.id "
+    #                 "FROM appointment "
+    #                 "INNER JOIN work_day "
+    #                 "ON appointment.work_day_id = work_day.id "
+    #                 "WHERE CURRENT_TIMESTAMP < work_day.date "
+    #                 " UNION "
+    #                 ""
+    #                 "SELECT appointment.id "
+    #                 "FROM appointment "
+    #                 "INNER JOIN work_day "
+    #                 "ON appointment.work_day_id = work_day.id "
+    #                 "WHERE CURRENT_TIMESTAMP = work_day.date AND CURRENT_TIME < appointment.time_reserved "
+    #                 ") matches"
+    #                 ";")
+    #     res = db.engine.execute(stmt)
+
+    #     response = []
+    #     for row in res:
+    #         response.append({"upcoming": row[0]})
+        
+    #     return response
+
     @staticmethod
     def how_many_upcoming_appointments_for_user(user_id):
         stmt = text("SELECT COUNT(appointment.id) "
@@ -244,7 +270,7 @@ class Appointment(Base):
                     "ON account_appointment.account_id = :user "
                     "INNER JOIN work_day "
                     "ON appointment.work_day_id = work_day.id "
-                    "WHERE CURRENT_TIMESTAMP < work_day.date OR CURRENT_TIMESTAMP < appointment.time_reserved;").params(user=user_id)
+                    "WHERE CURRENT_TIMESTAMP < work_day.date;").params(user=user_id)
         res = db.engine.execute(stmt)
 
         response = []
