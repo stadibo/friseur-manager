@@ -30,7 +30,7 @@ Services are presented on a website and it is possible to make reservations from
 
 [User stories](https://github.com/stadibo/friseurManager/blob/master/documentation/user_stories.md)
 
-[Database diagram](https://github.com/stadibo/friseurManager/blob/master/documentation/database_relation_diagram.png)
+[Database diagram](https://github.com/stadibo/friseurManager/blob/master/documentation/database_diagram.png)
 
 [Setup guide](https://github.com/stadibo/friseurManager/blob/master/documentation/installation_guide.md)
 
