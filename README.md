@@ -8,16 +8,35 @@ Services are presented on a website and it is possible to make reservations from
 
 ## Functionality
 
-- Hiring a new friseur
-- Firing a friseur
-- Tracking and changing work hours of friseurs
-- Defining a service
-- Defining and changing the assortment services
+**Appointments (CRUD)**
+
+- Reserve and appointment (even if not logged in)
+- Keeping track of appointments
+  - Set them  as fulfilled
+
+**Work_day (CRD)**
+
+- Create work days for friseurs
+- Show statistics for a work day
+
+**Account (CRUD)**
+
+- Hiring a new friseur (admin only)
+- Firing a friseur (admin only)
+- List accounts (admin only)
 - Making and canceling reservations
 - Registering and logging in for customers
-- keeping track of appointments
-- work sheets for employees
-- summary for management
+- Changing password (logged in user)
+- Passwords are encrypted
+
+
+## Not yet implemented functionality
+
+- Defining a service
+- Defining and changing the assortment services
+- Work sheets for employees
+- Summary for management
+- Tracking and changing work hours of friseurs
 
 ## Test user credentials 
 
@@ -37,3 +56,11 @@ Services are presented on a website and it is possible to make reservations from
 [User guide](https://github.com/stadibo/friseurManager/blob/master/documentation/user_guide.md)
 
 [SQL-create-table](https://github.com/stadibo/friseurManager/blob/master/documentation/SQL_create_table_statements.md)
+
+
+## Issues and improvements
+
+- A couple of methods are still a bit long
+- The routes leading to appointment data should also be able to traverse back the same direction, and not only lead to all appointments
+- The handling of dates could probably be made more simple, instead of manually checking and modifying the date value if needed
+- Make the authorization check take more than one role for making routes more reusable for users with different roles
