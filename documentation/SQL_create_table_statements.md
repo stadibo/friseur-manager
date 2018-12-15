@@ -1,5 +1,7 @@
 # SQL create table statements
 
+*The appointment table has some extra fields to accommodate the deletion of a friseur and/or customer account. The appointment related to a user is not deleted from the database when the user is deleted. This is due to a need to keep a record of appointments, maybe to connect them to other information in the future.*
+
 ```sql
 CREATE TABLE role (
         id INTEGER NOT NULL,
