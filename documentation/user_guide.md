@@ -39,6 +39,7 @@ To start the reservation of an appointment press the __Reserve an appointment__-
 3. Chose the time from those available. If the times do not work it is possible to go back using the browsers previous page navigation. Press the __Choose__-button on the row of the time to continue.
 
 *If logged in as customer the following step does not apply (Customer name will be assigned based on the name assossiated with the account).*
+
 4. Enter the name by which the customer will be identified. Press the __Confirm__-button to continue.
 
 5. If all goes well a page Saying reservation successful is displayed. It will also display the reservation number, which should be written down if user does not have an account. This number can be found from account page when logged in. Pressing __Back to front page__ directs user to front page...
